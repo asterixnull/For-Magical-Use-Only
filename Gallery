@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Desert Forge Gallery</title>
+    <title>For Magical Use Only Makerspace Marketplace Gallery</title>
     <link href="https://fonts.googleapis.com/css2?family=Unica+One&family=Abril+Fatface&display=swap" rel="stylesheet">
     <style>
         body { margin: 0; background: #1a0033; color: #ffd700; font-family: 'Unica One', cursive; text-align: center; }
@@ -15,9 +15,12 @@
 <body>
     <h1>Portfolio & Shop Gallery</h1>
     <div class="carousel">
-        <img src="3d-printed-ring.jpg" alt="3D Printed Ring">
-        <img src="laser-etched-wand.jpg" alt="Laser-Etched Wand">
-        <img src="engraved-oracle.jpg" alt="Engraved Oracle">
+        <img src="minisalvationmountain.png" alt="3D Printed Salvation Mountain">
+        <img src="octopusfingerprint.jpg" alt="3D Printed Octopus with middle fingers up">
+        <img src="mysteryrelicbox.png" alt="Mystery Magical Relic Box">
+<img src="tarotdeck.png" alt="Oracle Deck from the Slabs">
+<img src="guidedtours.png" alt="Guided Local Tours">
+<img src="themythostour.png" alt="The Famous Mythos Tour">
     </div>
 </body>
 </html>
