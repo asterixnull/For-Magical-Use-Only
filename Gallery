@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desert Forge Gallery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Unica+One&family=Abril+Fatface&display=swap" rel="stylesheet">
+    <style>
+        body { margin: 0; background: #1a0033; color: #ffd700; font-family: 'Unica One', cursive; text-align: center; }
+        h1 { font-family: 'Abril Fatface', cursive; color: #ff4500; }
+        .carousel { display: flex; overflow-x: auto; padding: 20px; }
+        .carousel img { width: 300px; height: 300px; object-fit: cover; margin: 0 10px; }
+    </style>
+</head>
+<body>
+    <h1>Portfolio & Shop Gallery</h1>
+    <div class="carousel">
+        <img src="3d-printed-ring.jpg" alt="3D Printed Ring">
+        <img src="laser-etched-wand.jpg" alt="Laser-Etched Wand">
+        <img src="engraved-oracle.jpg" alt="Engraved Oracle">
+    </div>
+</body>
+</html>
