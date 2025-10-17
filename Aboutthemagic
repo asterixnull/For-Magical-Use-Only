@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Desert Forge</title>
+    <link href="https://fonts.googleapis.com/css2?family=Unica+One&family=Abril+Fatface&display=swap" rel="stylesheet">
+    <style>
+        body { margin: 0; background: #1a0033; color: #ffd700; font-family: 'Unica One', cursive; text-align: center; }
+        h1 { font-family: 'Abril Fatface', cursive; color: #ff4500; }
+        p { padding: 20px; max-width: 800px; margin: 0 auto; }
+    </style>
+</head>
+<body>
+    <h1>About Us</h1>
+    <p>We’re a band of desert alchemists, turning sand into magic with 3D printers and laser engravers. Born from the endless dunes, we craft wands, totems, and oracles for those who dare to wield the extraordinary. Join our secret society of makers.</p>
+</body>
+</html>
