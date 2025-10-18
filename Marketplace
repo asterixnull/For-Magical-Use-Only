@@ -12,23 +12,48 @@
         .paypal-btn { padding: 10px 20px; background: #ff4500; color: #ffd700; text-decoration: none; border-radius: 5px; }
         .paypal-btn:hover { background: #ffd700; color: #1a0033; }
     </style>
+<script src="https://js.stripe.com/v3/"></script>
 </head>
 <body>
     <h1>Shop Magical Creations</h1>
+<div class="products">
     <div class="product">
-        <h2>Laser-Etched Wand</h2>
-        <p>$50</p>
-        <a href="https://www.paypal.com/ncp/payment/ForMagicalUseOnly/paypalme/50?item_name=Laser-Etched+Wand" class="paypal-btn">Buy with PayPal</a>
+        <h2>3D Prinyted Magic Wand</h2>
+        <p>Carved by desert spirits, infused with ancient runes. $50.</p>
+        <button id="checkout-button-wand">Buy with Stripe ($50)</button>
     </div>
     <div class="product">
-        <h2>3D-Printed Totem</h2>
-        <p>$30</p>
-        <a href="https://www.paypal.com/ncp/payment/ForMagicalUseOnly/paypalme/30?item_name=3D-Printed+Totem" class="paypal-btn">Buy with PayPal</a>
+        <h2>3D-Printed Salvation Mountain</h2>
+        <p>Layers of magic, forged under starlight. $35.</p>
+        <button id="checkout-button-totem">Buy with Stripe ($35)</button>
     </div>
     <div class="product">
-        <h2>Engraved Oracle Disk</h2>
-        <p>$75</p>
-        <a href="https://www.paypal.com/ncp/payment/ForMagicalUseOnly/paypalme/75?item_name=Engraved+Oracle+Disk" class="paypal-btn">Buy with PayPal</a>
+        <h2>Slab City Themed Oracle Deck</h2>
+        <p>Desert deck of prophecies, yours to interpret. $75.</p>
+        <button id="checkout-button-oracle">Buy with Stripe ($75)</button>
     </div>
+<script>
+    const stripe = Stripe('pk_live_51SJAagC2WMzoC8yUOEzNRf6XW4Q37cT5qkpklTSxo9vc3ukunfD7kArwq7NsaEelliZZDiv656iX9Iqgw2RRtMn900IT9qGL8H');
+    const checkoutButtons = document.querySelectorAll('[id^="checkout-button-"]');
+
+    checkoutButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const item = button.id.replace('checkout-button-', '');
+            let amount;
+            if (item === 'wand') amount = 5000; // $50 in cents
+            else if (item === 'totem') amount = 3000; // $30 in cents
+            else if (item === 'oracle') amount = 7500; // $75 in cents
+
+            stripe.redirectToCheckout({
+                lineItems: [{price: 'prod_TFgq65xCBonBoL', quantity: 1}],
+                mode: 'payment',
+                successUrl: 'https://formagicaluseonly.com/success',
+                cancelUrl: 'https://formagicaluseonly.com/cancel',
+            }).then((result) => {
+                if (result.error) console.log(result.error.message);
+            });
+        });
+    });
+</script>
 </body>
 </html>
