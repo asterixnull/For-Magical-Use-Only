@@ -6,17 +6,19 @@
     <title>Desert Draw - For Magical Use Only</title>
     <link href="https://fonts.googleapis.com/css2?family=Unica+One&display=swap" rel="stylesheet">
     <style>
-        body { margin: 0; background: #1a0033; overflow: hidden; }
-        #canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100vh; }
-        #colorPicker { position: absolute; top: 20px; left: 20px; z-index: 10; }
-        .color-btn { width: 30px; height: 30px; border: none; border-radius: 50%; margin: 5px; cursor: pointer; }
-        #neon-red { background: #ff00ff; }
-        #neon-green { background: #00ff00; }
-        #neon-blue { background: #00ffff; }
-        #neon-yellow { background: #ffff00; }
-        #neon-purple { background: #ff00ff; }
-        h1 { font-family: 'Unica One', cursive; color: #ffd700; text-align: center; position: absolute; top: 10px; width: 100%; }
-    </style>
+    body { margin: 0; background: #1a0033; overflow: hidden; cursor: crosshair; } /* Crosshair for drawing feel */
+    #canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100vh; cursor: crosshair; }
+    #colorPicker { position: absolute; top: 20px; left: 20px; z-index: 10; }
+    .color-btn { width: 40px; height: 40px; border: 2px solid #ffd700; border-radius: 50%; margin: 5px; cursor: pointer; transition: transform 0.2s; }
+    .color-btn:hover { transform: scale(1.2); box-shadow: 0 0 10px currentColor; }
+    .color-btn.active { border-width: 4px; }
+    #neon-red { background: #ff0000; } /* True red */
+    #neon-green { background: #00ff00; }
+    #neon-blue { background: #0000ff; } /* True blue */
+    #neon-yellow { background: #ffff00; }
+    #neon-purple { background: #8000ff; } /* Distinct purple */
+    h1 { font-family: 'Unica One', cursive; color: #ffd700; text-align: center; position: absolute; top: 10px; width: 100%; z-index: 10; text-shadow: 0 0 10px #ff4500; }
+                      </style>
 </head>
 <body>
     <h1>Draw Your Magic</h1>
@@ -28,50 +30,73 @@
         <button id="neon-purple" class="color-btn" onclick="setColor('#ff00ff')"></button>
     </div>
     <canvas id="canvas"></canvas>
-    <script>
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
+<script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const bg = new Image();
+    bg.src = 'crayonbackground.png'; // Your background
+    let drawing = false;
+    let currentColor = '#ff0000'; // Default red
+    let lastX = 0, lastY = 0; // For smooth lines
+
+    bg.onload = () => {
+        ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
+    };
+
+    function setColor(color) {
+        currentColor = color;
+        // Highlight active button
+        document.querySelectorAll('.color-btn').forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
+    }
+
+    // Mouse events
+    canvas.addEventListener('mousedown', (e) => { drawing = true; lastX = e.clientX; lastY = e.clientY; });
+    canvas.addEventListener('mouseup', () => drawing = false);
+    canvas.addEventListener('mouseout', () => drawing = false);
+    canvas.addEventListener('mousemove', draw);
+
+    function draw(e) {
+        if (!drawing) return;
+        ctx.strokeStyle = currentColor;
+        ctx.lineWidth = 3;
+        ctx.lineCap = 'round';
+        ctx.globalAlpha = 0.8; // Slight transparency for glow
+
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY);
+        ctx.lineTo(e.clientX, e.clientY);
+        ctx.stroke();
+
+        lastX = e.clientX;
+        lastY = e.clientY;
+
+        // Shooting star: Fade trail after 3 seconds with sparkle effect
+        const trail = ctx.getImageData(e.clientX - 5, e.clientY - 5, 10, 10);
+        setTimeout(() => {
+            ctx.globalAlpha = 0.5; // Fade
+            ctx.putImageData(trail, e.clientX - 5, e.clientY - 5);
+            ctx.globalAlpha = 1;
+            // Redraw BG to "erase" fully after fade
+            setTimeout(() => {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
+            }, 1000);
+        }, 3000);
+    }
+
+    // Touch support for mobile
+    canvas.addEventListener('touchstart', (e) => { e.preventDefault(); drawing = true; const touch = e.touches[0]; lastX = touch.clientX; lastY = touch.clientY; });
+    canvas.addEventListener('touchend', (e) => { e.preventDefault(); drawing = false; });
+    canvas.addEventListener('touchmove', (e) => { e.preventDefault(); const touch = e.touches[0]; draw({clientX: touch.clientX, clientY: touch.clientY}); });
+
+    window.addEventListener('resize', () => {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-        const bg = new Image();
-        bg.src = 'crayonbackground.png'; // Your uploaded background
-        let drawing = false;
-        let currentColor = '#ff00ff'; // Default neon purple
-
-        bg.onload = () => {
-            ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
-        };
-
-        function setColor(color) {
-            currentColor = color;
-        }
-
-        canvas.addEventListener('mousedown', () => drawing = true);
-        canvas.addEventListener('mouseup', () => drawing = false);
-        canvas.addEventListener('mousemove', draw);
-
-        function draw(e) {
-            if (!drawing) return;
-            ctx.beginPath();
-            ctx.lineWidth = 5;
-            ctx.lineCap = 'round';
-            ctx.strokeStyle = currentColor;
-            ctx.moveTo(e.clientX, e.clientY);
-            ctx.lineTo(e.clientX + 1, e.clientY + 1); // Tiny move to start
-            ctx.stroke();
-
-            // Shooting star effect: fade out after 2 seconds
-            setTimeout(() => {
-                ctx.clearRect(e.clientX - 10, e.clientY - 10, 20, 20); // Clear small area
-                ctx.drawImage(bg, 0, 0, canvas.width, canvas.height); // Redraw background
-            }, 2000);
-        }
-
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
-        });
-    </script>
+        ctx.drawImage(bg, 0, 0, canvas.width, canvas.height);
+    });
+</script>
 </body>
 </html>
