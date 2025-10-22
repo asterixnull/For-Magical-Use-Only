@@ -3,138 +3,179 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slab City Makerspace - For Magical Use Only</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Roboto:wght@300&display=swap" rel="stylesheet">
+    <title>FOR Magical Use Only</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto+Mono&display=swap" rel="stylesheet">
     <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            margin: 0;
-            font-family: 'Roboto', sans-serif;
-            background: linear-gradient(to bottom, #ff7e5f, #feb47b); /* Desert sunset gradient */
-            color: #333;
-            animation: fadeIn 2s ease-in;
+            font-family: 'Roboto Mono', monospace;
+            background: linear-gradient(180deg, #1b0c03, #4b2e1a);
+            color: #f4e4bc;
+            overflow-x: hidden;
+            transition: transform 1s ease-in-out;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        body.upside-down {
+            transform: rotate(180deg);
         }
         header {
-            position: relative;
-            height: 60vh;
-            overflow: hidden;
+            background: url('https://via.placeholder.com/1500x400?text=Slab+City+Magic') no-repeat center;
+            background-size: cover;
+            padding: 100px 20px;
             text-align: center;
-            color: white;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            animation: fadeIn 2s ease-in;
         }
-        header img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: brightness(0.8);
-            animation: zoomIn 5s ease-in-out infinite alternate;
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 4em;
+            color: #ffcc00;
+            text-shadow: 3px 3px 5px #000;
         }
-        @keyframes zoomIn {
-            0% { transform: scale(1); }
-            100% { transform: scale(1.05); }
+        .slogan {
+            font-size: 1.3em;
+            color: #fff;
+            margin-top: 15px;
         }
-        .hero-text {
-            position: absolute;
+        nav {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        nav a {
+            color: #ffcc00;
+            margin: 0 30px;
+            text-decoration: none;
+            font-size: 1.2em;
+            transition: color 0.3s;
+        }
+        nav a:hover {
+            color: #fff;
+            text-shadow: 0 0 10px #ffcc00;
+        }
+        .featured {
+            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .featured h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.5em;
+            color: #ffcc00;
+            margin-bottom: 20px;
+        }
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+        .item {
+            background: #2a1b0a;
+            border: 3px solid #ffcc00;
+            border-radius: 10px;
+            padding: 15px;
+            transition: transform 0.3s;
+        }
+        .item:hover {
+            transform: scale(1.05);
+        }
+        .item img {
+            max-width: 100%;
+            border-radius: 8px;
+        }
+        .item h3 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5em;
+            color: #fff;
+        }
+        .item p {
+            font-size: 1em;
+            color: #f4e4bc;
+        }
+        footer {
+            background: #1b0c03;
+            padding: 20px;
+            text-align: center;
+            color: #f4e4bc;
+        }
+        .hidden-gem {
+            display: none;
+            position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-family: 'Cinzel', serif;
-            font-size: 3em;
-            animation: glow 2s infinite alternate;
-        }
-        @keyframes glow {
-            0% { text-shadow: 0 0 10px #fff, 0 0 20px #ff00de; }
-            100% { text-shadow: 0 0 20px #fff, 0 0 30px #ff00de; }
-        }
-        section {
-            padding: 40px 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        h2 {
-            font-family: 'Cinzel', serif;
-            text-align: center;
-            color: #8b0000; /* Deep red for magic vibe */
-            margin-bottom: 20px;
-        }
-        .products {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-        }
-        .product-card {
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            width: 300px;
-            margin: 20px;
+            background: #4b2e1a;
             padding: 20px;
-            text-align: center;
-            transition: transform 0.3s;
+            border: 2px solid #ffcc00;
+            z-index: 200;
         }
-        .product-card:hover {
-            transform: scale(1.05);
-        }
-        button {
-            background: #ff00de;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1em;
-            transition: background 0.3s;
-        }
-        button:hover {
-            background: #8b008b;
-        }
-        footer {
-            text-align: center;
-            padding: 20px;
-            background: #333;
-            color: white;
+        .hidden-gem.active {
+            display: block;
         }
     </style>
 </head>
 <body>
-    <nav>
-        <a href="index.html">Home</a> | <a href="aboutthemagic.html">About The Magic</a> | <a href="gallery.html">Gallery</a> | <a href="marketplace.html">Shop</a> | <a href="draw.html">Draw</a> | <a href="tarot.html">Tarot</a>
-    </nav>
     <header>
-        <img src="mainbackground.png" alt="Magical Desert Sign"> <!-- Replace with your image name if different -->
-        <div class="hero-text">For Magical Use Only: Where Magic Meets the Machine</div>
+        <h1>FOR Magical Use Only</h1>
+        <p class="slogan">Yoir Imagination Fabrication Inspiration Animation Observation Creation Station</p>
     </header>
-    
-    <section id="about">
-        <h2>About Our Slab City Art Collective</h2>
-        <p>In the heart of the endless desert, we channel ancient energies through 3D printers and laser engravers. Not just tools—portals to creation. Custom wands that hum with power, etched talismans that whisper secrets, miracles born from sand and code. We're not some dusty workshop; we're alchemists of the new age, turning visions into reality for those who seek the extraordinary.</p>
+    <nav>
+        <a href="in,ml">Home</a>
+        <a href="shop.html">Shop</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="#" onclick="revealGem()">Hidden Gem</a>
+    </nav>
+    <section class="featured">
+        <h2>Featured Creations</h2>
+        <!-- Edit wording below -->
+        <div class="gallery">
+            <div class="item">
+                <img src="https://via.placeholder.com/250?text=Sabotage+Spark+Plug" alt="Sabotage Spark Plug">
+                <h3>Sabotage Spark Plug</h3>
+            <p>Misfire the chaos, $10</p>
+            </div>
+            <div class="item">
+                <img src="https://via.placeholder.com/250?text=Slab+Wizard+Orb" alt="Slab Wizard Orb">
+                <h3>Slab Wizard Orb</h3>
+                <p>Manifest or bust, $12</p>
+            </div>
+        </div>
     </section>
-    
-    <section id="products" class="products">
-        <h2>Our Magical Creations</h2>
-        <div class="product-card">
-            <h3>3D Printed Custom Magic Wand</h3>
-            <p>Infused with desert spirits—custom designs for your rituals. $50.</p>
-            <button>Order Now</button>
-        </div>
-        <div class="product-card">
-            <h3>3D-Printed Salvation Mountain</h3>
-            <p>Protective charms, printed layer by enchanted layer. $30.</p>
-            <button>Order Now</button>
-        </div>
-        <div class="product-card">
-            <h3>Custom Oracle Deck</h3>
-            <p>A deck if cards meets mystic symbols—tell us your vision. $75+.</p>
-            <button>Order Now</button>
-        </div>
-    </section>
-    
+    <div id="hidden-gem" class="hidden-gem">
+        <h3>Desert Secret</h3>
+        <p>Found the stash! DM on ThisIsHowSlab@gmail.com for a free print code.</p>
+        <button onclick="closeGem()">Close</button>
+    </div>
     <footer>
-        <p>Made in the middle of nowhere. For magical use only. Contact: thisishowislab@gmail.com | @thisishowislab</p>
-        <p>Ships in 2-5 days via desert winds.</p>
+        <p>&copy; 2025 FOR Magical Use Only. Crafted in Slab City’s dust.</p>
     </footer>
+    <script>
+        // Upside-down feature: Edit flipDay (e.g., 15 for 15th)
+        const flipDay = 15;
+        const today = new Date();
+        if (today.getDate() === flipDay) {
+            document.body.classList.add('upside-down');
+        }
+        // Pulse animation on click
+        document.querySelectorAll('.item').forEach(item => {
+            item.addEventListener('click', () => {
+                item.style.animation = 'pulse 0.5s';
+                setTimeout(() => item.style.animation = '', 500);
+            });
+        });
+        const style = document.createElement('style');
+        style.innerHTML = '@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }';
+        document.head.appendChild(style);
+        // Hidden gem
+        function revealGem() {
+            document.getElementById('hidden-gem').classList.add('active');
+        }
+        function closeGem() {
+            document.getElementById('hidden-gem').classList.remove('active');
+        }
+    </script>
 </body>
-</html>
+</html>q
