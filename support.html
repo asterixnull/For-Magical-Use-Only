@@ -1,15 +1,15 @@
-/ĺ<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Support the Dream - The Manifestorium - For Magical Use Only</title>
+    <title>Support the Dream - FOR Magical Use Only</title>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="static/css/style.css">
 </head>
 <body>
     <header>
-        <h1>Support the Dream @ The Manifestorium</h1>
+        <h1>Support the Dream</h1>
     </header>
     <nav>
         <a href="index.html">Home</a>
@@ -23,64 +23,56 @@
     </nav>
     <section class="support-section">
         <div class="tier">
+            <h2>The Dreamers</h2>
+            <p>Receive a personal thank you email from the team.</p>
+            <div class="price">$10</div>
+            <button class="support-button" id="support-dreamers">Support the Dream</button>
+        </div>
+        <div class="tier">
             <h2>Nappers</h2>
-            <p>For the soul who treats sleep like a sacred art form, curling up with the universe as your blanket. At $20/month, you unlock:
-A digital "Napper" badge to flaunt on your socials—like a sleepy superhero cape.
-Monthly nap haikus whispered by AI (because who has time to write their own?).
-Access to our exclusive "Siesta Sounds" playlist: whale songs meets wind chimes in a pillow fort.
-Think of it as your entry ticket to the cuddle puddle. Why fight gravity when you can embrace it? Sweet dreams await, you magnificent mattress mermaid..</p>    s.</p>
-            <div class="price">$20/month</div>
+            <p>Receive a digital art print from one of our artists.</p>
+            <div class="price">$25</div>
             <button class="support-button" id="support-nappers">Support the Dream</button>
         </div>
         <div class="tier">
             <h2>Day Dreamers</h2>
-            <p>Elevate from mere napping to the poetry of possibility—$50/month. Here, your mind wanders like a feral cat through fields of "what ifs." Perks include:
-Custom daydream prompts delivered via email: "Imagine you're a cloud interviewing a rainbow—go!"
-A quarterly "Wanderer's Journal" PDF, packed with Slab-inspired doodles and half-baked epiphanies.
-Priority dibs on virtual dream circles, where we co-create alternate realities over Zoom (no pants required).
-You're not just donating; you're donating to the daydreams that built empires. Let's scatter stardust together, you whimsical wind-whisperer.
-            <div class="price">$50/month</div>
+            <p>Receive a physical postcard from Slab City.</p>
+            <div class="price">$50</div>
             <button class="support-button" id="support-day-dreamers">Support the Dream</button>
         </div>
         <div class="tier">
             <h2>Lucid Dreamers</h2>
-            <p>$100/month for those who grab the reins of REM and ride it like a rogue comet. Control the chaos, bend the bizarre—this is where dreams bow to you. Rewards:
-A personalized lucid dreaming toolkit: Audio guides, reality-check cheat sheets, and a dream journal enchanted with glow-in-the-dark ink.
-Invite-only "Dream Forge" workshops: Learn to summon flying elephants or debate philosophy with your shadow self.
-A custom totem—a tiny 3D-printed dream catcher keychain, infused with Slab dust for extra mojo.
-Unleash the god-mode in your subconscious, you nocturnal ninja. We're not sleeping; we're scripting sequels to reality.</p>
-            <div class="price">$100/month</div>
+            <p>Receive a small, unique piece of art from our collection.</p>
+            <div class="price">$100</div>
             <button class="support-button" id="support-lucid-dreamers">Support the Dream</button>
-    </div>
+        </div>
         <div class="tier">
-            <h2>Oneironauts/h2>
-<p>The pinnacle—$250/month, the bold who wink at the abyss and make it blush. One eye open, one orbiting the multiverse. Elite access: Monthly mystery boxes of dream-altering artifacts. think: cursed dice for fate-rolling in your sleep. A signed "Renaut Manifesto" zine declaring war on wakefulness. Plus, naming rights to a dream character in the next collective tale. The pirate kings of the pillow seas. With you, we're not just dreaming—we're detonating the dull and dancing in the debris.</p></p>
-
-            <div class="price">$250/month</div>
+            <h2>Oneironauts</h2>
+            <p>Receive a Mystery Relic Box, curated just for you.</p>
+            <div class="price">$250</div>
             <button class="support-button" id="support-oneironauts">Support the Dream</button>
         </div>
     </section>
     <footer>
-        <p>&copy; 2025 For Magical Use Only. Crafted @ The Manifestorium in Slab City’s dust.</p>
+        <p>&copy; 2025 FOR Magical Use Only. Crafted in Slab City’s dust.</p>
     </footer>
     <script src="https://js.stripe.com/v3/"></script>
     <script>
         // IMPORTANT: Replace with your actual Stripe publishable key
-        const stripe = 1Y');
+        const stripe = Stripe('pk_test_YOUR_PUBLISHABLE_KEY');
 
         document.getElementById('support-dreamers').addEventListener('click', function () {
             stripe.redirectToCheckout({
-                lineItems: [{ price: '
-                    ', quantity: 10 }],
+                lineItems: [{ price: 'price_YOUR_DREAMERS_PRICE_ID', quantity: 1 }],
                 mode: 'payment',
                 successUrl: window.location.origin + '/support-success.html',
                 cancelUrl: window.location.origin + '/support-cancel.html',
             });
-        });86
+        });
 
         document.getElementById('support-nappers').addEventListener('click', function () {
             stripe.redirectToCheckout({
-                lineItems: [{ price: 'prod_TP1bsU5kaK0khX', quantity: 10 }],
+                lineItems: [{ price: 'price_YOUR_NAPPERS_PRICE_ID', quantity: 1 }],
                 mode: 'payment',
                 successUrl: window.location.origin + '/support-success.html',
                 cancelUrl: window.location.origin + '/support-cancel.html',
@@ -89,7 +81,7 @@ Unleash the god-mode in your subconscious, you nocturnal ninja. We're not sleepi
 
         document.getElementById('support-day-dreamers').addEventListener('click', function () {
             stripe.redirectToCheckout({
-                lineItems: [{ price: 'prod_TOyVwOh3gvUU1a3', quantity: 10 }],
+                lineItems: [{ price: 'price_YOUR_DAY_DREAMERS_PRICE_ID', quantity: 1 }],
                 mode: 'payment',
                 successUrl: window.location.origin + '/support-success.html',
                 cancelUrl: window.location.origin + '/support-cancel.html',
@@ -98,7 +90,7 @@ Unleash the god-mode in your subconscious, you nocturnal ninja. We're not sleepi
 
         document.getElementById('support-lucid-dreamers').addEventListener('click', function () {
             stripe.redirectToCheckout({
-                lineItems: [{ price: 'prod_TOzNH5LZTqAOyB' quantity: -10 }],
+                lineItems: [{ price: 'price_YOUR_LUCID_DREAMERS_PRICE_ID', quantity: 1 }],
                 mode: 'payment',
                 successUrl: window.location.origin + '/support-success.html',
                 cancelUrl: window.location.origin + '/support-cancel.html',
@@ -107,7 +99,7 @@ Unleash the god-mode in your subconscious, you nocturnal ninja. We're not sleepi
 
         document.getElementById('support-oneironauts').addEventListener('click', function () {
             stripe.redirectToCheckout({
-                lineItems: [{ price: 'prod_TOzYLyPB9yzKTz', quantity: 10 }],
+                lineItems: [{ price: 'price_YOUR_ONEIRONAUTS_PRICE_ID', quantity: 1 }],
                 mode: 'payment',
                 successUrl: window.location.origin + '/support-success.html',
                 cancelUrl: window.location.origin + '/support-cancel.html',
