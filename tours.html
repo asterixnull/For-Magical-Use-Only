@@ -25,16 +25,22 @@
     <section class="tours-section">
         <div class="tour-package">
             <h2>The Mythos Tour</h2>
-            <p>A guided journey through the art and history of Slab City, including a visit to the legendary Salvation Mountain.</p>
-            <div class="price">$50 per person</div>
+            <p>A sun-kissed ramble, all whimsy, perfect for pint-sized explorers and their wide-eyed guardians. We'll chase slab history: Wander the bones of bombed-out barracks, spinning yarns of ghost soldiers. Hunt for "fairy fossils" (they're just really cool rocks.) Picnic amid Car Henge, decoding murals like a choose-your-own-adventure from the gods. The Slab's soft underbelly: equal parts wonder and "wow, humans are weird." Leave with kiddo clutching a handmade map, ready to conquer bedtime.</p>
+            <div class="price">$100/adult $25/kid<p>
             <button class="buy-button" id="buy-mythos-tour">Book Now</button>
         </div>
         <div class="tour-package">
             <h2>The Manifestorium Tour</h2>
-            <p>An exclusive, behind-the-scenes look at our creative process at The Manifestorium. Meet the artists and see where the magic happens.</p>
-            <div class="price">$75 per person</div>
+            <p>An exclusive, behind the scenes look our creative process at The Manifestorium. Meet the artists and see where the magic happens.</p>
+            <div class="price">$30 per person</div>
             <button class="buy-button" id="buy-manifestorium-tour">Book Now</button>
         </div>
+            <div class="tour-package">
+            <h2>Night Tour For The Brave</h2>
+            <p>Sign the waiver, lace up, and dive into Slab’s wilder whispers. Starts at dark-thirty, ends when the stars cry uncle. A velvet-roped romp through nocturnal nonsense—chase the latest drama, decode campfire glyphs, and maybe summon what still dances from the ’90s. Dawn finds us at the hot springs: share a tale, toss a token, and run if the wind gets too personal. Bring water, wits, and a buddy—they might mistake you for one of them.</p>
+            <div class="price">$150 per person</div>
+            <button class="buy-button" id="buy-manifestorium-tour">Book Now</button>
+            </div>
     </section>
     <footer>
         <p>&copy; 2025 FOR Magical Use Only. Crafted in Slab City’s dust.</p>
@@ -42,13 +48,13 @@
     <script src="https://js.stripe.com/v3/"></script>
     <script>
         // IMPORTANT: Replace with your actual Stripe publishable key
-        const stripe = Stripe('pk_test_YOUR_PUBLISHABLE_KEY');
+        const stripe = 'pk_live_51SHgwqRwxEDs1ZMpAD2kMl7SrW98uTOo70KSu7TB6eCBHjCIlRc69WxRHpfZ3hqN4hM4wbZpufRtUJHK5CoVmqxm00GXzfP5nT');
 
         document.getElementById('buy-mythos-tour').addEventListener('click', function () {
             // When the customer clicks on the button, redirect them to Checkout.
             stripe.redirectToCheckout({
                 lineItems: [{
-                    price: 'price_YOUR_MYTHOS_TOUR_PRICE_ID', // IMPORTANT: Replace with the actual Price ID
+                    price: 'prod_TP00MfkVB5EUMe', // IMPORTANT: Replace with the actual Price ID
                     quantity: 1
                 }],
                 mode: 'payment',
@@ -67,7 +73,7 @@
         document.getElementById('buy-manifestorium-tour').addEventListener('click', function () {
             stripe.redirectToCheckout({
                 lineItems: [{
-                    price: 'price_YOUR_MANIFESTORIUM_TOUR_PRICE_ID', // IMPORTANT: Replace with the actual Price ID
+                    price: 'prod_TPAZ7r8hIhKOje', // IMPORTANT: Replace with the actual Price ID
                     quantity: 1
                 }],
                 mode: 'payment',
@@ -76,6 +82,25 @@
             })
             .then(function (result) {
                 if (result.error) {
+                    alert(result.error.message);
+                }
+            });
+        });
+        document.getElementById('buy-night-tour').addEventListener('click', function () {
+            // When the customer clicks on the button, redirect them to Checkout.
+            stripe.redirectToCheckout({
+                lineItems: [{
+                    price: 'prod_TP0Ik1gKq5ypQR', // IMPORTANT: Replace with the actual Price ID
+                    quantity: 1
+                }],
+                mode: 'payment',
+                successUrl: window.location.origin + '/tour-success.html',
+                cancelUrl: window.location.origin + '/tour-cancel.html',
+            })
+            .then(function (result) {
+                if (result.error) {
+                    // If `redirectToCheckout` fails due to a browser or network
+                    // error, display the localized error message to your customer.
                     alert(result.error.message);
                 }
             });
