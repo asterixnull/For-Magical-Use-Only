@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Marketplace - FOR Magical Use Only</title>
+    <title>Marketplace - The Manifestorium - For Magical Use Only</title>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="static/css/style.css">
 </head>
@@ -26,7 +26,7 @@
         <div class="product">
             <img src="mysteryrelicbox.png" alt="Mystery Relic Box">
             <h2>Mystery Relic Box</h2>
-            <p>A curated box of magical items and art from the desert. Each box is unique.</p>
+            <p>A curated box of magical items and art from the desert. Each box is unique.88 keys unlock the universe. Inside: a hand-forged Slab relic—half alchemy, half alley magic. Rusted ’40s scraps etched with “what-the-hell” sigils, wrapped in festival fabric. Maybe it’s magic, maybe desert mischief. Open to find: a WiFi-warding talisman, whispering stones, and a lore scroll. Not a product—a pact. Adopt one, let the Slab’s spirit squat in your sock drawer, and see what infinity does next.</p>
             <div class="price">$100</div>
             <button class="buy-button" id="buy-relic-box">Buy Now</button>
         </div>
@@ -38,12 +38,12 @@
     <script src="https://js.stripe.com/v3/"></script>
     <script>
         // IMPORTANT: Replace with your actual Stripe publishable key
-        const stripe = Stripe('pk_test_YOUR_PUBLISHABLE_KEY');
+        const stripe = Stripe('pk_live_51SHgwqRwxEDs1ZMpAD2kMl7SrW98uTOo70KSu7TB6eCBHjCIlRc69WxRHpfZ3hqN4hM4wbZpufRtUJHK5CoVmqxm00GXzfP5nT');
 
         document.getElementById('buy-relic-box').addEventListener('click', function () {
             stripe.redirectToCheckout({
                 lineItems: [{
-                    price: 'price_YOUR_RELIC_BOX_PRICE_ID', // IMPORTANT: Replace with the actual Price ID
+                    price: 'prod_TP1bsU5kaK0khX', // IMPORTANT: Replace with the actual Price ID
                     quantity: 1
                 }],
                 mode: 'payment',
