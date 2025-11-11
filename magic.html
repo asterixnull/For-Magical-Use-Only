@@ -5,99 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>For Magical Use Only</title>
     <link href="https://fonts.googleapis.com/css2?family=Unica+One&family=Abril+Fatface&display=swap" rel="stylesheet">
-    <style>
-        body {
-            margin: 0;
-            overflow-x: hidden;
-            background: linear-gradient(to bottom, #1a0033, #4b0082); /* Mystic night sky */
-            color: #ffd700; /* Gold for magic */
-            cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20'><circle cx='10' cy='10' r='5' fill='%23ffd700' opacity='0.8'/></svg>") 10 10, auto;
-        }
-        .parallax {
-            height: 100vh;
-            background: url('https://via.placeholder.com/1200x800?text=Desert+Dunes') no-repeat center;
-            background-size: cover;
-            position: relative;
-            overflow: hidden;
-            transform-style: preserve-3d;
-        }
-        .parallax::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to top, rgba(26, 0, 51, 0.7), transparent);
-            z-index: 1;
-        }
-        .orbit-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-family: 'Unica One', cursive;
-            font-size: 2.5em;
-            color: #ff4500;
-            animation: orbit 20s linear infinite;
-        }
-        @keyframes orbit {
-            0% { transform: translate(-50%, -50%) rotate(0deg); }
-            100% { transform: translate(-50%, -50%) rotate(360deg); }
-        }
-        .summon-button {
-            position: absolute;
-            top: 70%;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 15px 30px;
-            font-family: 'Abril Fatface', cursive;
-            font-size: 1.5em;
-            background: #ff4500;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.5s;
-        }
-        .summon-button:hover {
-            background: #ffd700;
-            box-shadow: 0 0 20px #ffd700;
-        }
-        .products {
-            position: relative;
-            padding: 50px 20px;
-            z-index: 2;
-            opacity: 0;
-            animation: fadeIn 1s ease-in 1s forwards;
-        }
-        @keyframes fadeIn {
-            to { opacity: 1; }
-        }
-        .product {
-            display: inline-block;
-            margin: 20px;
-            padding: 20px;
-            background: rgba(255, 215, 0, 0.1);
-            border: 1px solid #ffd700;
-            border-radius: 10px;
-            transform: rotate(-5deg);
-            transition: transform 0.3s;
-        }
-        .product:hover {
-            transform: rotate(0deg) scale(1.1);
-        }
-        .footer {
-            text-align: center;
-            padding: 20px;
-            background: #1a0033;
-            color: #ffd700;
-        }
-    </style>
+    <link rel="stylesheet" href="static/css/style.css">
 </head>
 <body>
     <nav>
-        <a href="index.html">Home</a> | <a href="aboutthemagic.html">About The Magic</a> | <a href="gallery.html">Gallery</a> | <a href="marketplace.html">Shop</a> | <a href="draw.html">Draw</a> | <a href="tarot.html">Tarot</a>
+        <a href="index.html">Home</a>
+        <a href="aboutthemagic.html">About</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="marketplace.html">Shop</a>
+        <a href="tours.html">Tours</a>
+        <a href="support.html">Support</a>
+        <a href="draw.html">Draw</a>
+        <a href="tarot.html">Tarot</a>
+        <a href="contact.html">Contact</a>
     </nav>
     <div class="parallax">
         <div class="orbit-text">Enter the Desert Forge</div>

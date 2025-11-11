@@ -1,0 +1,120 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Roboto+Mono&display=swap');
+
+:root {
+    --primary-color: #ffcc00;
+    --secondary-color: #f4e4bc;
+    --background-dark: #1b0c03;
+    --background-light: #4b2e1a;
+    --text-color: #f4e4bc;
+    --font-main: 'Roboto Mono', monospace;
+    --font-heading: 'Cinzel Decorative', cursive;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-main);
+    background: linear-gradient(180deg, var(--background-dark), var(--background-light));
+    color: var(--text-color);
+    overflow-x: hidden;
+    transition: all 0.5s ease-in-out;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    color: var(--primary-color);
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+a:hover {
+    color: var(--secondary-color);
+}
+
+header {
+    background: url('formagicaluseonlygrafittiwall.png') no-repeat center center/cover;
+    padding: 120px 20px;
+    text-align: center;
+    border-bottom: 5px solid var(--primary-color);
+    animation: fadeInDown 1s ease-in-out;
+}
+
+header h1 {
+    font-size: 6em;
+    font-weight: 700;
+}
+
+nav {
+    background: rgba(0, 0, 0, 0.9);
+    padding: 20px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    text-align: center;
+    border-bottom: 2px solid var(--primary-color);
+}
+
+nav a {
+    margin: 0 25px;
+    font-size: 1.3em;
+    font-family: var(--font-heading);
+    font-weight: 700;
+}
+
+.container {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 50px 20px;
+    animation: fadeInUp 1s ease-in-out;
+}
+
+.button {
+    background-color: var(--primary-color);
+    color: var(--background-dark);
+    padding: 15px 30px;
+    font-size: 1.2em;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.button:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

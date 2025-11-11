@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support the Dream - FOR Magical Use Only</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+    <header>
+        <h1>Support the Dream</h1>
+    </header>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="aboutthemagic.html">About</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="marketplace.html">Shop</a>
+        <a href="tours.html">Tours</a>
+        <a href="draw.html">Draw</a>
+        <a href="tarot.html">Tarot</a>
+        <a href="contact.html">Contact</a>
+    </nav>
+    <section class="support-section">
+        <div class="tier">
+            <h2>The Dreamers</h2>
+            <p>Receive a personal thank you email from the team.</p>
+            <div class="price">$10</div>
+            <button class="support-button" id="support-dreamers">Support the Dream</button>
+        </div>
+        <div class="tier">
+            <h2>Nappers</h2>
+            <p>Receive a digital art print from one of our artists.</p>
+            <div class="price">$25</div>
+            <button class="support-button" id="support-nappers">Support the Dream</button>
+        </div>
+        <div class="tier">
+            <h2>Day Dreamers</h2>
+            <p>Receive a physical postcard from Slab City.</p>
+            <div class="price">$50</div>
+            <button class="support-button" id="support-day-dreamers">Support the Dream</button>
+        </div>
+        <div class="tier">
+            <h2>Lucid Dreamers</h2>
+            <p>Receive a small, unique piece of art from our collection.</p>
+            <div class="price">$100</div>
+            <button class="support-button" id="support-lucid-dreamers">Support the Dream</button>
+        </div>
+        <div class="tier">
+            <h2>Oneironauts</h2>
+            <p>Receive a Mystery Relic Box, curated just for you.</p>
+            <div class="price">$250</div>
+            <button class="support-button" id="support-oneironauts">Support the Dream</button>
+        </div>
+    </section>
+    <footer>
+        <p>&copy; 2025 FOR Magical Use Only. Crafted in Slab City’s dust.</p>
+    </footer>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        // IMPORTANT: Replace with your actual Stripe publishable key
+        const stripe = Stripe('pk_test_YOUR_PUBLISHABLE_KEY');
+
+        document.getElementById('support-dreamers').addEventListener('click', function () {
+            stripe.redirectToCheckout({
+                lineItems: [{ price: 'price_YOUR_DREAMERS_PRICE_ID', quantity: 1 }],
+                mode: 'payment',
+                successUrl: window.location.origin + '/support-success.html',
+                cancelUrl: window.location.origin + '/support-cancel.html',
+            });
+        });
+
+        document.getElementById('support-nappers').addEventListener('click', function () {
+            stripe.redirectToCheckout({
+                lineItems: [{ price: 'price_YOUR_NAPPERS_PRICE_ID', quantity: 1 }],
+                mode: 'payment',
+                successUrl: window.location.origin + '/support-success.html',
+                cancelUrl: window.location.origin + '/support-cancel.html',
+            });
+        });
+
+        document.getElementById('support-day-dreamers').addEventListener('click', function () {
+            stripe.redirectToCheckout({
+                lineItems: [{ price: 'price_YOUR_DAY_DREAMERS_PRICE_ID', quantity: 1 }],
+                mode: 'payment',
+                successUrl: window.location.origin + '/support-success.html',
+                cancelUrl: window.location.origin + '/support-cancel.html',
+            });
+        });
+
+        document.getElementById('support-lucid-dreamers').addEventListener('click', function () {
+            stripe.redirectToCheckout({
+                lineItems: [{ price: 'price_YOUR_LUCID_DREAMERS_PRICE_ID', quantity: 1 }],
+                mode: 'payment',
+                successUrl: window.location.origin + '/support-success.html',
+                cancelUrl: window.location.origin + '/support-cancel.html',
+            });
+        });
+
+        document.getElementById('support-oneironauts').addEventListener('click', function () {
+            stripe.redirectToCheckout({
+                lineItems: [{ price: 'price_YOUR_ONEIRONAUTS_PRICE_ID', quantity: 1 }],
+                mode: 'payment',
+                successUrl: window.location.origin + '/support-success.html',
+                cancelUrl: window.location.origin + '/support-cancel.html',
+            });
+        });
+    </script>
+</body>
+</html>
