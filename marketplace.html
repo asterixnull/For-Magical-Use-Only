@@ -6,6 +6,8 @@
     <title>Marketplace - FOR Magical Use Only</title>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="static/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/contentful@latest/dist/contentful.browser.min.js"></script>
+    <script src="static/js/contentful-config.js"></script>
 </head>
 <body>
     <header>
@@ -22,40 +24,71 @@
         <a href="tarot.html">Tarot</a>
         <a href="contact.html">Contact</a>
     </nav>
-    <section class="marketplace-section">
-        <div class="product">
-            <img src="mysteryrelicbox.png" alt="Mystery Relic Box">
-            <h2>Mystery Relic Box</h2>
-            <p>A curated box of magical items and art from the desert. Each box is unique.</p>
-            <div class="price">$100</div>
-            <button class="buy-button" id="buy-relic-box">Buy Now</button>
-        </div>
-        <!-- Add more products here -->
+    <section class="marketplace-section" id="marketplace-container">
+        <!-- Products will be dynamically inserted here -->
     </section>
     <footer>
         <p>&copy; 2025 FOR Magical Use Only. Crafted in Slab City’s dust.</p>
     </footer>
     <script src="https://js.stripe.com/v3/"></script>
     <script>
-        // IMPORTANT: Replace with your actual Stripe publishable key
-        const stripe = Stripe('pk_test_YOUR_PUBLISHABLE_KEY');
+        const stripe = Stripe('pk_live_51P3Z5yRxKIpEa9z2e3hVj0oMOq40S3nK1gWqWjOr3a2wEV2kRr5e5PA3mjaqYkFp2DkS44tYgNn581ywhaCAc6ca00b0TFEuGq');
+        const marketplaceContainer = document.getElementById('marketplace-container');
 
-        document.getElementById('buy-relic-box').addEventListener('click', function () {
-            stripe.redirectToCheckout({
-                lineItems: [{
-                    price: 'price_YOUR_RELIC_BOX_PRICE_ID', // IMPORTANT: Replace with the actual Price ID
-                    quantity: 1
-                }],
-                mode: 'payment',
-                successUrl: window.location.origin + '/order-success.html',
-                cancelUrl: window.location.origin + '/order-cancel.html',
-            })
-            .then(function (result) {
-                if (result.error) {
-                    alert(result.error.message);
-                }
+        client.getEntries({
+            content_type: 'NVpVj8LwkehFy7TfbDiCu'
+        })
+        .then((response) => {
+            response.items.forEach(item => {
+                const product = document.createElement('div');
+                product.classList.add('product');
+
+                const productName = document.createElement('h2');
+                productName.textContent = item.fields.productName;
+                product.appendChild(productName);
+
+                const productDescription = document.createElement('p');
+                productDescription.textContent = item.fields.productDescription;
+                product.appendChild(productDescription);
+
+                const productImage = document.createElement('img');
+                client.getAsset(item.fields.productImage.sys.id)
+                .then((asset) => {
+                    productImage.src = 'https:' + asset.fields.file.url;
+                    productImage.alt = asset.fields.title;
+                    product.appendChild(productImage);
+                })
+
+                const price = document.createElement('div');
+                price.classList.add('price');
+                price.textContent = `\$${item.fields.price}`;
+                product.appendChild(price);
+
+                const buyButton = document.createElement('button');
+                buyButton.classList.add('buy-button');
+                buyButton.textContent = 'Buy Now';
+                buyButton.addEventListener('click', () => {
+                    stripe.redirectToCheckout({
+                        lineItems: [{
+                            price: item.fields.stripePriceId,
+                            quantity: 1
+                        }],
+                        mode: 'payment',
+                        successUrl: window.location.origin + '/order-success.html',
+                        cancelUrl: window.location.origin + '/order-cancel.html',
+                    })
+                    .then(function (result) {
+                        if (result.error) {
+                            alert(result.error.message);
+                        }
+                    });
+                });
+                product.appendChild(buyButton);
+
+                marketplaceContainer.appendChild(product);
             });
-        });
+        })
+        .catch(console.error);
     </script>
 </body>
 </html>
