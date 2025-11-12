@@ -77,6 +77,24 @@ nav a {
     animation: fadeInUp 1s ease-in-out;
 }
 
+.tours-section, .marketplace-section, .support-section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.tour-package, .product, .tier {
+    background: var(--background-light);
+    border: 2px solid var(--primary-color);
+    border-radius: 10px;
+    padding: 20px;
+    width: 30%;
+    min-width: 300px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+}
+
 .button {
     background-color: var(--primary-color);
     color: var(--background-dark);
@@ -116,5 +134,59 @@ nav a {
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 4em;
+    }
+
+    nav {
+        padding: 15px;
+    }
+
+    nav a {
+        margin: 10px;
+        font-size: 1.2em;
+    }
+
+    .tours-section, .marketplace-section, .support-section {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .tour-package, .product, .tier {
+        width: 80%;
+        margin-bottom: 30px;
+    }
+}
+
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 3em;
+    }
+
+    nav {
+        flex-direction: column;
+    }
+
+    nav a {
+        font-size: 1em;
+        margin: 5px 0;
+    }
+
+    .container {
+        padding: 30px 15px;
+    }
+
+    .button {
+        padding: 12px 25px;
+        font-size: 1em;
+    }
+
+    .tour-package, .product, .tier {
+        width: 95%;
     }
 }

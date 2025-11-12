@@ -6,6 +6,8 @@
     <title>Tours - FOR Magical Use Only</title>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="static/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/contentful@latest/dist/contentful.browser.min.js"></script>
+    <script src="static/js/contentful-config.js"></script>
 </head>
 <body>
     <header>
@@ -22,64 +24,71 @@
         <a href="tarot.html">Tarot</a>
         <a href="contact.html">Contact</a>
     </nav>
-    <section class="tours-section">
-        <div class="tour-package">
-            <h2>The Mythos Tour</h2>
-            <p>A guided journey through the art and history of Slab City, including a visit to the legendary Salvation Mountain.</p>
-            <div class="price">$50 per person</div>
-            <button class="buy-button" id="buy-mythos-tour">Book Now</button>
-        </div>
-        <div class="tour-package">
-            <h2>The Manifestorium Tour</h2>
-            <p>An exclusive, behind-the-scenes look at our creative process at The Manifestorium. Meet the artists and see where the magic happens.</p>
-            <div class="price">$75 per person</div>
-            <button class="buy-button" id="buy-manifestorium-tour">Book Now</button>
-        </div>
+    <section class="tours-section" id="tours-container">
+        <!-- Tour packages will be dynamically inserted here -->
     </section>
     <footer>
         <p>&copy; 2025 FOR Magical Use Only. Crafted in Slab City’s dust.</p>
     </footer>
     <script src="https://js.stripe.com/v3/"></script>
     <script>
-        // IMPORTANT: Replace with your actual Stripe publishable key
-        const stripe = Stripe('pk_test_YOUR_PUBLISHABLE_KEY');
+        const stripe = Stripe('pk_live_51P3Z5yRxKIpEa9z2e3hVj0oMOq40S3nK1gWqWjOr3a2wEV2kRr5e5PA3mjaqYkFp2DkS44tYgNn581ywhaCAc6ca00b0TFEuGq');
+        const toursContainer = document.getElementById('tours-container');
 
-        document.getElementById('buy-mythos-tour').addEventListener('click', function () {
-            // When the customer clicks on the button, redirect them to Checkout.
-            stripe.redirectToCheckout({
-                lineItems: [{
-                    price: 'price_YOUR_MYTHOS_TOUR_PRICE_ID', // IMPORTANT: Replace with the actual Price ID
-                    quantity: 1
-                }],
-                mode: 'payment',
-                successUrl: window.location.origin + '/tour-success.html',
-                cancelUrl: window.location.origin + '/tour-cancel.html',
-            })
-            .then(function (result) {
-                if (result.error) {
-                    // If `redirectToCheckout` fails due to a browser or network
-                    // error, display the localized error message to your customer.
-                    alert(result.error.message);
-                }
-            });
-        });
+        client.getEntries({
+            content_type: '70oPrCNwUtqI05YuxYLW9D'
+        })
+        .then((response) => {
+            response.items.forEach(item => {
+                const tourPackage = document.createElement('div');
+                tourPackage.classList.add('tour-package');
 
-        document.getElementById('buy-manifestorium-tour').addEventListener('click', function () {
-            stripe.redirectToCheckout({
-                lineItems: [{
-                    price: 'price_YOUR_MANIFESTORIUM_TOUR_PRICE_ID', // IMPORTANT: Replace with the actual Price ID
-                    quantity: 1
-                }],
-                mode: 'payment',
-                successUrl: window.location.origin + '/tour-success.html',
-                cancelUrl: window.location.origin + '/tour-cancel.html',
-            })
-            .then(function (result) {
-                if (result.error) {
-                    alert(result.error.message);
-                }
+                const tourName = document.createElement('h2');
+                tourName.textContent = item.fields.tourName;
+                tourPackage.appendChild(tourName);
+
+                const tourDescription = document.createElement('p');
+                tourDescription.textContent = item.fields.tourDescription;
+                tourPackage.appendChild(tourDescription);
+
+                const tourImage = document.createElement('img');
+                client.getAsset(item.fields.tourImage.sys.id)
+                .then((asset) => {
+                    tourImage.src = 'https:' + asset.fields.file.url;
+                    tourImage.alt = asset.fields.title;
+                    tourPackage.appendChild(tourImage);
+                })
+
+                const price = document.createElement('div');
+                price.classList.add('price');
+                price.textContent = `\$${item.fields.price}`;
+                tourPackage.appendChild(price);
+
+                const bookButton = document.createElement('button');
+                bookButton.classList.add('buy-button');
+                bookButton.textContent = 'Book Now';
+                bookButton.addEventListener('click', () => {
+                    stripe.redirectToCheckout({
+                        lineItems: [{
+                            price: item.fields.stripePriceId,
+                            quantity: 1
+                        }],
+                        mode: 'payment',
+                        successUrl: window.location.origin + '/tour-success.html',
+                        cancelUrl: window.location.origin + '/tour-cancel.html',
+                    })
+                    .then(function (result) {
+                        if (result.error) {
+                            alert(result.error.message);
+                        }
+                    });
+                });
+                tourPackage.appendChild(bookButton);
+
+                toursContainer.appendChild(tourPackage);
             });
-        });
+        })
+        .catch(console.error);
     </script>
 </body>
 </html>
