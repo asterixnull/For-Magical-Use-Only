@@ -84,6 +84,13 @@ nav a {
     gap: 20px;
 }
 
+.gallery .item img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 5px;
+}
+
 .tour-package, .product, .tier {
     background: var(--background-light);
     border: 2px solid var(--primary-color);
@@ -93,6 +100,8 @@ nav a {
     min-width: 300px;
     text-align: center;
     box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .button {
