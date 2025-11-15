@@ -27,10 +27,11 @@
     </div>
 
     <script>
-        const tarotContainer = document.getElementById('tarot-container');
-        let allCards = [];
+        document.addEventListener('DOMContentLoaded', () => {
+            const tarotContainer = document.getElementById('tarot-container');
+            let allCards = [];
 
-        const positions = [
+            const positions = [
             { top: '50%', left: '50%', transform: 'rotate(0deg) scale(1)' },
             { top: '40%', left: '60%', transform: 'rotate(45deg) scale(0.9)' },
             { top: '30%', left: '70%', transform: 'rotate(90deg) scale(0.8)' },
@@ -122,6 +123,7 @@
             // Third Tuesday Flip
             const isThirdTuesday = (day >= 15 && day <= 21) && (new Date(now.getFullYear(), month - 1, day).getDay() === 2);
             if (isThirdTuesday) document.body.style.transform = 'rotate(180deg)';
+        });
         });
     </script>
 </body>

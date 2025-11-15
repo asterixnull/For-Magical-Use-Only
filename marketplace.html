@@ -32,12 +32,13 @@
     </footer>
     <script src="https://js.stripe.com/v3/"></script>
     <script>
-        const stripe = Stripe('pk_live_51P3Z5yRxKIpEa9z2e3hVj0oMOq40S3nK1gWqWjOr3a2wEV2kRr5e5PA3mjaqYkFp2DkS44tYgNn581ywhaCAc6ca00b0TFEuGq');
-        const marketplaceContainer = document.getElementById('marketplace-container');
+        document.addEventListener('DOMContentLoaded', () => {
+            const stripe = Stripe('pk_live_51P3Z5yRxKIpEa9z2e3hVj0oMOq40S3nK1gWqWjOr3a2wEV2kRr5e5PA3mjaqYkFp2DkS44tYgNn581ywhaCAc6ca00b0TFEuGq');
+            const marketplaceContainer = document.getElementById('marketplace-container');
 
-        client.getEntries({
-            content_type: 'NVpVj8LwkehFy7TfbDiCu'
-        })
+            client.getEntries({
+                content_type: 'NVpVj8LwkehFy7TfbDiCu'
+            })
         .then((response) => {
             response.items.forEach(item => {
                 const product = document.createElement('div');
@@ -89,6 +90,7 @@
             });
         })
         .catch(console.error);
+        });
     </script>
 </body>
 </html>
