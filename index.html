@@ -14,6 +14,13 @@
         <h1>FOR Magical Use Only</h1>
         <p class="slogan">Your Imagination Fabrication Inspiration Animation Observation Creation Station</p>
     </header>
+    <div id="easter-egg-popup" class="easter-egg-popup">
+        <div class="popup-content">
+            <span class="close-popup">&times;</span>
+            <h2>You Found It!</h2>
+            <p>Send me an email with a screenshot of this pop-up to get a free 3D model or print model.</p>
+        </div>
+    </div>
     <nav>
         <a href="index.html">Home</a>
         <a href="aboutthemagic.html">About</a>
@@ -57,13 +64,25 @@
         const style = document.createElement('style');
         style.innerHTML = '@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }';
         document.head.appendChild(style);
-        // Hidden gem
-        function revealGem() {
-            document.getElementById('hidden-gem').classList.add('active');
-        }
-        function closeGem() {
-            document.getElementById('hidden-gem').classList.remove('active');
-        }
+
+        // Easter Egg Logic
+        const trigger = document.getElementById('easter-egg-trigger');
+        const popup = document.getElementById('easter-egg-popup');
+        const closeBtn = document.querySelector('.close-popup');
+
+        trigger.addEventListener('click', () => {
+            popup.style.display = 'flex';
+        });
+
+        closeBtn.addEventListener('click', () => {
+            popup.style.display = 'none';
+        });
+
+        window.addEventListener('click', (event) => {
+            if (event.target == popup) {
+                popup.style.display = 'none';
+            }
+        });
     </script>
 </body>
 </html>
