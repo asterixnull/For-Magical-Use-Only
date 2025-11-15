@@ -84,6 +84,51 @@ nav a {
     gap: 20px;
 }
 
+.carousel {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    padding: 20px;
+}
+
+.welcome-section {
+    padding: 60px 20px;
+    text-align: center;
+    max-width: 900px;
+    margin: 40px auto;
+    background: rgba(0,0,0,0.2);
+    border-radius: 10px;
+    border: 1px solid var(--primary-color);
+}
+
+.welcome-text h2 {
+    font-size: 2.8em;
+    margin-bottom: 30px;
+}
+
+.welcome-text .mission-statement {
+    font-size: 1.4em;
+    font-family: var(--font-heading);
+    line-height: 1.6;
+    margin-bottom: 25px;
+    font-weight: 700;
+    color: var(--secondary-color);
+}
+
+.welcome-text .invitation {
+    font-size: 1.2em;
+    line-height: 1.7;
+}
+
+.carousel img {
+    max-width: 300px;
+    height: auto;
+    border: 3px solid var(--primary-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
 .gallery .item img {
     max-width: 100%;
     height: auto;
