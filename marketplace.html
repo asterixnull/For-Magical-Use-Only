@@ -7,7 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="static/css/style.css">
     <script src="https://cdn.jsdelivr.net/npm/contentful@latest/dist/contentful.browser.min.js"></script>
-    <script src="static/js/contentful-config.js"></script>
 </head>
 <body>
     <header>
@@ -35,6 +34,11 @@
         document.addEventListener('DOMContentLoaded', () => {
             const stripe = Stripe('pk_live_51P3Z5yRxKIpEa9z2e3hVj0oMOq40S3nK1gWqWjOr3a2wEV2kRr5e5PA3mjaqYkFp2DkS44tYgNn581ywhaCAc6ca00b0TFEuGq');
             const marketplaceContainer = document.getElementById('marketplace-container');
+
+            const client = contentful.createClient({
+                space: window.CONTENTFUL_SPACE_ID,
+                accessToken: window.CONTENTFUL_ACCESS_TOKEN,
+            });
 
             client.getEntries({
                 content_type: 'NVpVj8LwkehFy7TfbDiCu'
