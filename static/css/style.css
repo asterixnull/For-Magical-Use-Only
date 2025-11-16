@@ -64,10 +64,14 @@ nav {
 }
 
 nav a {
-    margin: 0 25px;
-    font-size: 1.3em;
-    font-family: var(--font-heading);
-    font-weight: 700;
+    margin: 0 15px;
+    font-size: 1.8em;
+    transition: transform 0.3s ease;
+}
+
+nav a:hover {
+    transform: scale(1.2);
+    color: var(--secondary-color);
 }
 
 .container {
@@ -165,6 +169,37 @@ nav a {
     color: var(--primary-color);
 }
 
+
+.data-vis-section {
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.data-vis-section h3 {
+    font-size: 2em;
+    margin-bottom: 20px;
+    color: var(--secondary-color);
+}
+
+.power-vis-container {
+    width: 80%;
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #000;
+    border: 2px solid var(--primary-color);
+    border-radius: 10px;
+    padding: 5px;
+    box-shadow: 0 0 15px var(--primary-color);
+}
+
+.power-bar {
+    height: 30px;
+    background: linear-gradient(90deg, #ffcc00, #ffeb3b);
+    width: 0%; /* Initial width */
+    border-radius: 5px;
+    transition: width 1.5s ease-in-out;
+    box-shadow: 0 0 10px #ffeb3b;
+}
 
 .carousel img {
     max-width: 300px;
