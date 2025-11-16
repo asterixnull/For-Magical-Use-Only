@@ -6,22 +6,26 @@
     <title>Tours - FOR Magical Use Only</title>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/contentful@latest/dist/contentful.browser.min.js"></script>
 </head>
 <body>
-    <header>
-        <h1>Book a Tour</h1>
+    <header id="page-header">
+        <h1 id="page-title">Tours</h1>
     </header>
+    <section class="page-description" id="page-description">
+        <!-- Page description will be dynamically inserted here -->
+    </section>
     <nav>
-        <a href="index.html">Home</a>
-        <a href="aboutthemagic.html">About</a>
-        <a href="gallery.html">Gallery</a>
-        <a href="marketplace.html">Shop</a>
-        <a href="tours.html">Tours</a>
-        <a href="support.html">Support</a>
-        <a href="draw.html">Draw</a>
-        <a href="tarot.html">Tarot</a>
-        <a href="contact.html">Contact</a>
+        <a href="index.html" title="Home"><i class="fas fa-home"></i></a>
+        <a href="aboutthemagic.html" title="About"><i class="fas fa-info-circle"></i></a>
+        <a href="gallery.html" title="Gallery"><i class="fas fa-images"></i></a>
+        <a href="marketplace.html" title="Shop"><i class="fas fa-shopping-cart"></i></a>
+        <a href="tours.html" title="Tours"><i class="fas fa-map-marked-alt"></i></a>
+        <a href="support.html" title="Support"><i class="fas fa-heart"></i></a>
+        <a href="draw.html" title="Draw"><i class="fas fa-pencil-alt"></i></a>
+        <a href="tarot.html" title="Tarot"><i class="fas fa-book-open"></i></a>
+        <a href="contact.html" title="Contact"><i class="fas fa-envelope"></i></a>
     </nav>
     <section class="tours-section" id="tours-container">
         <!-- Tour packages will be dynamically inserted here -->
@@ -32,14 +36,37 @@
     <script src="https://js.stripe.com/v3/"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const stripe = Stripe('pk_live_51P3Z5yRxKIpEa9z2e3hVj0oMOq40S3nK1gWqWjOr3a2wEV2kRr5e5PA3mjaqYkFp2DkS44tYgNn581ywhaCAc6ca00b0TFEuGq');
-            const toursContainer = document.getElementById('tours-container');
+            const pageHeader = document.getElementById('page-header');
+            const pageTitle = document.getElementById('page-title');
+            const pageDescription = document.getElementById('page-description');
 
             const client = contentful.createClient({
                 space: window.CONTENTFUL_SPACE_ID,
                 accessToken: window.CONTENTFUL_ACCESS_TOKEN,
             });
 
+            // Fetch the 'Page' content for the Tours page
+            client.getEntries({
+                content_type: '1XN3CX7ObBGrENgewbJlIG',
+                'fields.pageTitle': 'Tours'
+            })
+            .then((response) => {
+                if (response.items.length > 0) {
+                    const page = response.items[0];
+                    pageTitle.textContent = page.fields.pageTitle;
+                    pageDescription.textContent = page.fields.pageDescription;
+
+                    client.getAsset(page.fields.headerBackgroundImage.sys.id)
+                    .then((asset) => {
+                        pageHeader.style.backgroundImage = `url(https:${asset.fields.file.url})`;
+                    });
+                }
+            });
+
+            const stripe = Stripe('pk_live_51P3Z5yRxKIpEa9z2e3hVj0oMOq40S3nK1gWqWjOr3a2wEV2kRr5e5PA3mjaqYkFp2DkS44tYgNn581ywhaCAc6ca00b0TFEuGq');
+            const toursContainer = document.getElementById('tours-container');
+
+            // Now, fetch the tour packages
             client.getEntries({
                 content_type: '70oPrCNwUtqI05YuxYLW9D'
             })

@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For Magical Use Only</title>
+    <title>FOR Magical Use Only</title>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/contentful@latest/dist/contentful.browser.min.js"></script>
     <script src="static/js/contentful-config.js"></script>
 </head>
 <body>
     <header>
         <h1>FOR Magical Use Only</h1>
-        <p class="slogan">Your Imagination Fabrication Inspiration Animation Observation Creation Station</p>
+        <p class="slogan">Yoir Imagination Fabrication Inspiration Animation Observation Creation Station<span id="easter-egg-trigger">.</span></p>
     </header>
     <div id="easter-egg-popup" class="easter-egg-popup">
         <div class="popup-content">
@@ -22,15 +23,15 @@
         </div>
     </div>
     <nav>
-        <a href="index.html">Home</a>
-        <a href="aboutthemagic.html">About</a>
-        <a href="gallery.html">Gallery</a>
-        <a href="marketplace.html">Shop</a>
-        <a href="tours.html">Tours</a>
-        <a href="support.html">Support</a>
-        <a href="draw.html">Draw</a>
-        <a href="tarot.html">Tarot</a>
-        <a href="contact.html">Contact</a>
+        <a href="index.html" title="Home"><i class="fas fa-home"></i></a>
+        <a href="aboutthemagic.html" title="About"><i class="fas fa-info-circle"></i></a>
+        <a href="gallery.html" title="Gallery"><i class="fas fa-images"></i></a>
+        <a href="marketplace.html" title="Shop"><i class="fas fa-shopping-cart"></i></a>
+        <a href="tours.html" title="Tours"><i class="fas fa-map-marked-alt"></i></a>
+        <a href="support.html" title="Support"><i class="fas fa-heart"></i></a>
+        <a href="draw.html" title="Draw"><i class="fas fa-pencil-alt"></i></a>
+        <a href="tarot.html" title="Tarot"><i class="fas fa-book-open"></i></a>
+        <a href="contact.html" title="Contact"><i class="fas fa-envelope"></i></a>
     </nav>
     <section class="welcome-section">
         <div class="welcome-text">
@@ -39,13 +40,16 @@
             <p class="invitation">You’re stepping into a zone where improvisation is law, tech is a paintbrush, and your own weirdest ideas are suddenly fair game. Here, everything is an experiment. You’re invited to participate, not spectate.</p>
         </div>
     </section>
-    <div id="hidden-gem" class="hidden-gem">
-        <h3>¿no⅄ ǝɹ∀ oɥM</h3>
-        <p>Found the stash! DM on ThisIsHowSlab@gmail.com for a free print code.</p>
-        <button onclick="closeGem()">Close</button>
-    </div>
+
+    <section class="data-vis-section">
+        <h3>Community Power Level</h3>
+        <div id="power-visualization" class="power-vis-container">
+            <div id="power-bar" class="power-bar"></div>
+        </div>
+    </section>
+
     <footer>
-        <p>&copy; 2025 FOR Magical Use Only. Crafted in Slab City’s dust @ The Manifestorium.</p>
+        <p>&copy; 2025 FOR Magical Use Only. Crafted in Slab City’s dust.</p>
     </footer>
     <script>
         // Upside-down feature: Edit flipDay (e.g., 15 for 15th)
@@ -82,6 +86,20 @@
             if (event.target == popup) {
                 popup.style.display = 'none';
             }
+        });
+
+        // Living Data Experiment
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('data/community-power.txt')
+                .then(response => response.text())
+                .then(text => {
+                    const powerLevel = parseInt(text, 10);
+                    const powerBar = document.getElementById('power-bar');
+                    if (powerBar && !isNaN(powerLevel)) {
+                        powerBar.style.width = `${powerLevel}%`;
+                    }
+                })
+                .catch(error => console.error('Error fetching power data:', error));
         });
     </script>
 </body>
