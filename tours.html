@@ -7,7 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="static/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/contentful@latest/dist/contentful.browser.min.js"></script>
 </head>
 <body>
     <header id="page-header">
@@ -35,92 +34,89 @@
     </footer>
     <script src="https://js.stripe.com/v3/"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             const pageHeader = document.getElementById('page-header');
             const pageTitle = document.getElementById('page-title');
             const pageDescription = document.getElementById('page-description');
 
-            const client = contentful.createClient({
-                space: window.CONTENTFUL_SPACE_ID,
-                accessToken: window.CONTENTFUL_ACCESS_TOKEN,
-            });
-
             // Fetch the 'Page' content for the Tours page
-            client.getEntries({
-                content_type: '1XN3CX7ObBGrENgewbJlIG',
-                'fields.pageTitle': 'Tours'
-            })
-            .then((response) => {
-                if (response.items.length > 0) {
-                    const page = response.items[0];
+            try {
+                const pageResponse = await fetch('/api/contentful?content_type=1XN3CX7ObBGrENgewbJlIG');
+                const pageData = await pageResponse.json();
+
+                const page = pageData.items.find(p => p.fields.pageTitle === 'Tours');
+                if (page) {
                     pageTitle.textContent = page.fields.pageTitle;
                     pageDescription.textContent = page.fields.pageDescription;
 
-                    client.getAsset(page.fields.headerBackgroundImage.sys.id)
-                    .then((asset) => {
-                        pageHeader.style.backgroundImage = `url(https:${asset.fields.file.url})`;
-                    });
+                    const imageAsset = pageData.includes.Asset.find(asset => asset.sys.id === page.fields.headerBackgroundImage.sys.id);
+                    if (imageAsset) {
+                         pageHeader.style.backgroundImage = `url(https:${imageAsset.fields.file.url})`;
+                    }
                 }
-            });
+            } catch (error) {
+                console.error('Failed to load page data:', error);
+            }
 
             const stripe = Stripe('pk_live_51P3Z5yRxKIpEa9z2e3hVj0oMOq40S3nK1gWqWjOr3a2wEV2kRr5e5PA3mjaqYkFp2DkS44tYgNn581ywhaCAc6ca00b0TFEuGq');
             const toursContainer = document.getElementById('tours-container');
 
             // Now, fetch the tour packages
-            client.getEntries({
-                content_type: '70oPrCNwUtqI05YuxYLW9D'
-            })
-        .then((response) => {
-            response.items.forEach(item => {
-                const tourPackage = document.createElement('div');
-                tourPackage.classList.add('tour-package');
+            try {
+                const toursResponse = await fetch('/api/contentful?content_type=70oPrCNwUtqI05YuxYLW9D');
+                const toursData = await toursResponse.json();
 
-                const tourName = document.createElement('h2');
-                tourName.textContent = item.fields.tourName;
-                tourPackage.appendChild(tourName);
+                toursData.items.forEach(item => {
+                    const tourPackage = document.createElement('div');
+                    tourPackage.classList.add('tour-package');
 
-                const tourDescription = document.createElement('p');
-                tourDescription.textContent = item.fields.tourDescription;
-                tourPackage.appendChild(tourDescription);
+                    const tourName = document.createElement('h2');
+                    tourName.textContent = item.fields.tourName;
+                    tourPackage.appendChild(tourName);
 
-                const tourImage = document.createElement('img');
-                client.getAsset(item.fields.tourImage.sys.id)
-                .then((asset) => {
-                    tourImage.src = 'https:' + asset.fields.file.url;
-                    tourImage.alt = asset.fields.title;
-                    tourPackage.appendChild(tourImage);
-                })
+                    const tourDescription = document.createElement('p');
+                    tourDescription.textContent = item.fields.tourDescription;
+                    tourPackage.appendChild(tourDescription);
 
-                const price = document.createElement('div');
-                price.classList.add('price');
-                price.textContent = `\$${item.fields.price}`;
-                tourPackage.appendChild(price);
+                    const tourImage = document.createElement('img');
+                    const imageAsset = toursData.includes.Asset.find(asset => asset.sys.id === item.fields.tourImage.sys.id);
+                    if (imageAsset) {
+                        tourImage.src = 'https:' + imageAsset.fields.file.url;
+                        tourImage.alt = imageAsset.fields.title;
+                        tourPackage.appendChild(tourImage);
+                    }
 
-                const bookButton = document.createElement('button');
-                bookButton.classList.add('buy-button');
-                bookButton.textContent = 'Book Now';
-                bookButton.addEventListener('click', () => {
-                    stripe.redirectToCheckout({
-                        lineItems: [{
-                            price: item.fields.stripePriceId,
-                            quantity: 1
-                        }],
-                        mode: 'payment',
-                        successUrl: window.location.origin + '/tour-success.html',
-                        cancelUrl: window.location.origin + '/tour-cancel.html',
-                    })
-                    .then(function (result) {
-                        if (result.error) {
-                            alert(result.error.message);
-                        }
+                    const price = document.createElement('div');
+                    price.classList.add('price');
+                    price.textContent = `\$${item.fields.price}`;
+                    tourPackage.appendChild(price);
+
+                    const bookButton = document.createElement('button');
+                    bookButton.classList.add('buy-button');
+                    bookButton.textContent = 'Book Now';
+                    bookButton.addEventListener('click', () => {
+                        stripe.redirectToCheckout({
+                            lineItems: [{
+                                price: item.fields.stripePriceId,
+                                quantity: 1
+                            }],
+                            mode: 'payment',
+                            successUrl: window.location.origin + '/tour-success.html',
+                            cancelUrl: window.location.origin + '/tour-cancel.html',
+                        })
+                        .then(function (result) {
+                            if (result.error) {
+                                alert(result.error.message);
+                            }
+                        });
                     });
-                });
-                tourPackage.appendChild(bookButton);
+                    tourPackage.appendChild(bookButton);
 
-                toursContainer.appendChild(tourPackage);
-            });
-        })
-        .catch(console.error);
+                    toursContainer.appendChild(tourPackage);
+                });
+            } catch (error) {
+                console.error('Failed to load tour data:', error);
+            }
         });
     </script>
 </body>

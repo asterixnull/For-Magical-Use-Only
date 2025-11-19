@@ -7,7 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="static/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/contentful@latest/dist/contentful.browser.min.js"></script>
 </head>
 <body>
     <header>
@@ -32,69 +31,65 @@
     </footer>
     <script src="https://js.stripe.com/v3/"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             const stripe = Stripe('pk_live_51P3Z5yRxKIpEa9z2e3hVj0oMOq40S3nK1gWqWjOr3a2wEV2kRr5e5PA3mjaqYkFp2DkS44tYgNn581ywhaCAc6ca00b0TFEuGq');
             const marketplaceContainer = document.getElementById('marketplace-container');
 
-            const client = contentful.createClient({
-                space: window.CONTENTFUL_SPACE_ID,
-                accessToken: window.CONTENTFUL_ACCESS_TOKEN,
-            });
+            try {
+                const response = await fetch('/api/contentful?content_type=NVpVj8LwkehFy7TfbDiCu');
+                const data = await response.json();
 
-            client.getEntries({
-                content_type: 'NVpVj8LwkehFy7TfbDiCu'
-            })
-        .then((response) => {
-            response.items.forEach(item => {
-                const product = document.createElement('div');
-                product.classList.add('product');
+                data.items.forEach(item => {
+                    const product = document.createElement('div');
+                    product.classList.add('product');
 
-                const productName = document.createElement('h2');
-                productName.textContent = item.fields.productName;
-                product.appendChild(productName);
+                    const productName = document.createElement('h2');
+                    productName.textContent = item.fields.productName;
+                    product.appendChild(productName);
 
-                const productDescription = document.createElement('p');
-                productDescription.textContent = item.fields.productDescription;
-                product.appendChild(productDescription);
+                    const productDescription = document.createElement('p');
+                    productDescription.textContent = item.fields.productDescription;
+                    product.appendChild(productDescription);
 
-                const productImage = document.createElement('img');
-                client.getAsset(item.fields.productImage.sys.id)
-                .then((asset) => {
-                    productImage.src = 'https:' + asset.fields.file.url;
-                    productImage.alt = asset.fields.title;
-                    product.appendChild(productImage);
-                })
+                    const productImage = document.createElement('img');
+                    const imageAsset = data.includes.Asset.find(asset => asset.sys.id === item.fields.productImage.sys.id);
+                    if (imageAsset) {
+                        productImage.src = 'https:' + imageAsset.fields.file.url;
+                        productImage.alt = imageAsset.fields.title;
+                        product.appendChild(productImage);
+                    }
 
-                const price = document.createElement('div');
-                price.classList.add('price');
-                price.textContent = `\$${item.fields.price}`;
-                product.appendChild(price);
+                    const price = document.createElement('div');
+                    price.classList.add('price');
+                    price.textContent = `\$${item.fields.price}`;
+                    product.appendChild(price);
 
-                const buyButton = document.createElement('button');
-                buyButton.classList.add('buy-button');
-                buyButton.textContent = 'Buy Now';
-                buyButton.addEventListener('click', () => {
-                    stripe.redirectToCheckout({
-                        lineItems: [{
-                            price: item.fields.stripePriceId,
-                            quantity: 1
-                        }],
-                        mode: 'payment',
-                        successUrl: window.location.origin + '/order-success.html',
-                        cancelUrl: window.location.origin + '/order-cancel.html',
-                    })
-                    .then(function (result) {
-                        if (result.error) {
-                            alert(result.error.message);
-                        }
+                    const buyButton = document.createElement('button');
+                    buyButton.classList.add('buy-button');
+                    buyButton.textContent = 'Buy Now';
+                    buyButton.addEventListener('click', () => {
+                        stripe.redirectToCheckout({
+                            lineItems: [{
+                                price: item.fields.stripePriceId,
+                                quantity: 1
+                            }],
+                            mode: 'payment',
+                            successUrl: window.location.origin + '/order-success.html',
+                            cancelUrl: window.location.origin + '/order-cancel.html',
+                        })
+                        .then(function (result) {
+                            if (result.error) {
+                                alert(result.error.message);
+                            }
+                        });
                     });
-                });
-                product.appendChild(buyButton);
+                    product.appendChild(buyButton);
 
-                marketplaceContainer.appendChild(product);
-            });
-        })
-        .catch(console.error);
+                    marketplaceContainer.appendChild(product);
+                });
+            } catch (error) {
+                console.error('Failed to load marketplace products:', error);
+            }
         });
     </script>
 </body>

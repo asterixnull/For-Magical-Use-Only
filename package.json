@@ -1,0 +1,12 @@
+{
+  "name": "for-magical-use-only",
+  "version": "1.0.0",
+  "description": "Static site with Contentful integration",
+  "main": "index.html",
+  "scripts": {},
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "contentful": "^10.6.14"
+  }
+}

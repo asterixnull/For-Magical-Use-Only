@@ -7,7 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Unica+One&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="static/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/contentful@latest/dist/contentful.browser.min.js"></script>
 </head>
 <body>
     <nav>
@@ -30,92 +29,93 @@
         document.addEventListener('DOMContentLoaded', () => {
             const tarotContainer = document.getElementById('tarot-container');
             let allCards = [];
-
-            const client = contentful.createClient({
-                space: window.CONTENTFUL_SPACE_ID,
-                accessToken: window.CONTENTFUL_ACCESS_TOKEN,
-            });
+            let assets = [];
 
             const positions = [
-            { top: '50%', left: '50%', transform: 'rotate(0deg) scale(1)' },
-            { top: '40%', left: '60%', transform: 'rotate(45deg) scale(0.9)' },
-            { top: '30%', left: '70%', transform: 'rotate(90deg) scale(0.8)' },
-            { top: '40%', left: '40%', transform: 'rotate(135deg) scale(0.9)' },
-            { top: '60%', left: '30%', transform: 'rotate(180deg) scale(0.8)' },
-            { top: '70%', left: '40%', transform: 'rotate(225deg) scale(0.9)' },
-            { top: '60%', left: '60%', transform: 'rotate(270deg) scale(0.8)' }
-        ];
+                { top: '50%', left: '50%', transform: 'rotate(0deg) scale(1)' },
+                { top: '40%', left: '60%', transform: 'rotate(45deg) scale(0.9)' },
+                { top: '30%', left: '70%', transform: 'rotate(90deg) scale(0.8)' },
+                { top: '40%', left: '40%', transform: 'rotate(135deg) scale(0.9)' },
+                { top: '60%', left: '30%', transform: 'rotate(180deg) scale(0.8)' },
+                { top: '70%', left: '40%', transform: 'rotate(225deg) scale(0.9)' },
+                { top: '60%', left: '60%', transform: 'rotate(270deg) scale(0.8)' }
+            ];
 
-        // Fetch all tarot cards from Contentful on page load
-        client.getEntries({ content_type: 'RGC6GL7ZkM9GmI3xm2aFz' })
-            .then((response) => {
-                allCards = response.items;
-            })
-            .catch(console.error);
+            // Fetch all tarot cards from the secure API on page load
+            fetch('/api/contentful?content_type=RGC6GL7ZkM9GmI3xm2aFz')
+                .then(response => response.json())
+                .then(data => {
+                    allCards = data.items;
+                    assets = data.includes.Asset;
+                })
+                .catch(console.error);
 
-        document.getElementById('draw-button').addEventListener('click', () => {
-            // Clear previous draw
-            tarotContainer.innerHTML = '<button id="draw-button">Draw the Vortex</button>';
-            // Re-add the event listener to the new button
-            document.getElementById('draw-button').addEventListener('click', drawCards);
-
-
-            drawCards();
-        });
-
-        function drawCards() {
-            if (allCards.length === 0) {
-                alert("The cards are still being shuffled. Please wait a moment and try again.");
-                return;
-            }
-
-            const drawnCards = [];
-            while (drawnCards.length < 7 && drawnCards.length < allCards.length) {
-                const card = allCards[Math.floor(Math.random() * allCards.length)];
-                if (!drawnCards.includes(card)) {
-                    drawnCards.push(card);
+            function attachDrawListener() {
+                const drawButton = document.getElementById('draw-button');
+                if (drawButton) {
+                    drawButton.addEventListener('click', drawCards);
                 }
             }
 
-            drawnCards.forEach((cardData, index) => {
-                const cardElement = document.createElement('div');
-                cardElement.classList.add('card');
+            function drawCards() {
+                // Clear previous draw but keep the button
+                tarotContainer.innerHTML = '<button id="draw-button">Draw the Vortex</button>';
+                attachDrawListener();
 
-                const cardName = document.createElement('h2');
-                cardName.textContent = cardData.fields.cardName;
-                cardElement.appendChild(cardName);
+                if (allCards.length === 0) {
+                    alert("The cards are still being shuffled. Please wait a moment and try again.");
+                    return;
+                }
 
-                const cardImage = document.createElement('img');
-                 client.getAsset(cardData.fields.cardImage.sys.id)
-                .then((asset) => {
-                    cardImage.src = 'https:' + asset.fields.file.url;
-                    cardImage.alt = asset.fields.title;
-                    cardElement.appendChild(cardImage);
-                })
+                const drawnCards = [];
+                while (drawnCards.length < 7 && drawnCards.length < allCards.length) {
+                    const card = allCards[Math.floor(Math.random() * allCards.length)];
+                    if (!drawnCards.find(c => c.sys.id === card.sys.id)) {
+                        drawnCards.push(card);
+                    }
+                }
 
-                const cardDescription = document.createElement('p');
-                cardDescription.textContent = cardData.fields.cardDescription;
-                cardElement.appendChild(cardDescription);
+                drawnCards.forEach((cardData, index) => {
+                    const cardElement = document.createElement('div');
+                    cardElement.classList.add('card');
 
-                cardElement.style.top = positions[index].top;
-                cardElement.style.left = positions[index].left;
-                cardElement.style.transform = positions[index].transform;
+                    const cardName = document.createElement('h2');
+                    cardName.textContent = cardData.fields.cardName;
+                    cardElement.appendChild(cardName);
 
-                tarotContainer.appendChild(cardElement);
+                    const cardImage = document.createElement('img');
+                    const imageAsset = assets.find(asset => asset.sys.id === cardData.fields.cardImage.sys.id);
+                    if (imageAsset) {
+                        cardImage.src = 'https:' + imageAsset.fields.file.url;
+                        cardImage.alt = imageAsset.fields.title;
+                        cardElement.appendChild(cardImage);
+                    }
 
-                // Psychedelic orbit animation
-                let angle = 0;
-                const orbit = setInterval(() => {
-                    angle += 2;
-                    cardElement.style.transform = `${positions[index].transform} translate(${Math.sin(angle * Math.PI / 180) * 50}px, ${Math.cos(angle * Math.PI / 180) * 50}px)`;
-                    if (angle >= 360) clearInterval(orbit);
-                }, 50);
-            });
-        }
+                    const cardDescription = document.createElement('p');
+                    cardDescription.textContent = cardData.fields.cardDescription;
+                    cardElement.appendChild(cardDescription);
 
-        // Full Moon Distortion
-        window.addEventListener('load', () => {
-            const now = new Date();
+                    cardElement.style.top = positions[index].top;
+                    cardElement.style.left = positions[index].left;
+                    cardElement.style.transform = positions[index].transform;
+
+                    tarotContainer.appendChild(cardElement);
+
+                    // Psychedelic orbit animation
+                    let angle = 0;
+                    const orbit = setInterval(() => {
+                        angle += 2;
+                        cardElement.style.transform = `${positions[index].transform} translate(${Math.sin(angle * Math.PI / 180) * 50}px, ${Math.cos(angle * Math.PI / 180) * 50}px)`;
+                        if (angle >= 360) clearInterval(orbit);
+                    }, 50);
+                });
+            }
+
+            attachDrawListener();
+
+            // Full Moon Distortion
+            window.addEventListener('load', () => {
+                const now = new Date();
             const day = now.getDate();
             const month = now.getMonth() + 1;
             const isFullMoon = [17].includes(day) && month === 10; // Oct 17, 2025—adjust for real dates

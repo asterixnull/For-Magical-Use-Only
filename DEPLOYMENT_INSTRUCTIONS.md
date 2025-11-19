@@ -1,8 +1,8 @@
-# Deployment Instructions: Connecting to Contentful Securely
+# Deployment Instructions: Connecting to Contentful Securely on Vercel
 
-Your website is now built to load content (tours, products, etc.) dynamically from Contentful. To do this securely, we can't store your secret API keys directly in the code. Instead, we use a secure practice called **environment variables**.
+Your website is built to load content (tours, products, etc.) dynamically from Contentful. To do this securely, your secret API keys are stored as **Environment Variables** in your Vercel project.
 
-Your hosting provider (like Netlify, Vercel, or others) will securely store these keys and make them available to your website when it's running. This guide will walk you through setting this up.
+This guide explains how this setup works and how to ensure it's configured correctly.
 
 ## Step 1: Find Your Contentful API Keys
 
@@ -16,37 +16,33 @@ You will need two pieces of information from your Contentful account.
 2.  **Content Delivery API - Access Token:**
     *   Go to **Settings** > **API keys**.
     *   Click on your active API key (it should be named something like "FOR Magical Use Only Key").
-    *   Copy the key labeled **Content Delivery API - access token**. It should **not** start with `CFPAT-`.
+    *   Copy the key labeled **Content Delivery API - access token**.
 
-## Step 2: Add Keys to Your Hosting Provider
+## Step 2: Add Keys to Your Vercel Project
 
-Log in to the dashboard of your website's hosting provider (e.g., Netlify, Vercel, GitHub Pages). Find the settings for your site and look for a section named **"Environment Variables,"** "Environment," or "Secrets."
+Log in to your Vercel dashboard, select your project, and navigate to the project's settings.
 
-You need to create two new variables:
+1.  Click the **"Settings"** tab.
+2.  In the menu on the left, click **"Environment Variables"**.
+3.  Ensure you have the following two variables created:
 
-1.  **Variable Name:** `CONTENTFUL_SPACE_ID`
-    *   **Value:** Paste the **Space ID** you copied in Step 1.
+| Key | Value |
+| :--- | :--- |
+| `CONTENTFUL_SPACE_ID` | (Paste your Space ID here) |
+| `CONTENTFUL_ACCESS_TOKEN` | (Paste your Access Token here) |
 
-2.  **Variable Name:** `CONTENTFUL_ACCESS_TOKEN`
-    *   **Value:** Paste the **Content Delivery API - access token** you copied in Step 1.
+Vercel will make these variables securely available to the backend of your project.
 
-## Step 3: How It Works (Script Injection)
+## Step 3: How It Works (Secure Serverless Function)
 
-Our website code (`static/js/contentful-config.js`) expects to find these keys on the `window` object. Your hosting provider can automatically inject these server-side environment variables into your HTML files during the build process.
+This project uses a **Serverless Function** (`/api/contentful.js`) to handle all communication with Contentful. This is the modern, secure way to protect your secret keys.
 
-Most modern hosting platforms for static sites (like Netlify and Vercel) have a feature called **"Snippet Injection"** or **"Post-processing"** that can do this.
+Here's the process:
+1.  A page on the website (like `tours.html`) needs to load data.
+2.  Instead of trying to connect to Contentful directly, the page sends a request to a local URL on your site: `/api/contentful`.
+3.  Vercel automatically runs the code in `api/contentful.js` on its servers.
+4.  This server-side code securely reads the Environment Variables (`CONTENTFUL_SPACE_ID` and `CONTENTFUL_ACCESS_TOKEN`).
+5.  The function then uses these keys to fetch the requested data from Contentful.
+6.  Finally, the function sends the data back to the browser to be displayed on the page.
 
-Go to your site's build or deploy settings and look for "Snippet Injection." You'll want to add the following snippet **before the closing `</head>` tag** of your pages:
-
-```html
-<script>
-  window.CONTENTFUL_SPACE_ID = "{{ .Env.CONTENTFUL_SPACE_ID }}";
-  window.CONTENTFUL_ACCESS_TOKEN = "{{ .Env.CONTENTFUL_ACCESS_TOKEN }}";
-</script>
-```
-
-**Note:** The exact syntax (`{{ .Env.VAR_NAME }}`) might vary slightly depending on your hosting provider.
-*   **For Netlify:** The syntax above is correct for Netlify's snippet injection.
-*   **For Vercel:** You might need a different approach, potentially using a serverless function to serve the variables, or using the `env` property in `vercel.json` for build-time variables. Please consult their documentation for the most up-to-date method.
-
-Once you have configured this, your hosting provider will automatically replace the placeholders with your actual keys every time you deploy the site. This keeps your keys safe and your website functional.
+This architecture ensures that your secret API keys are **never** exposed to the public, providing a secure and robust solution.
