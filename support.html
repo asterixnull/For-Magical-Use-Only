@@ -7,7 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto+Mono&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="static/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/contentful@latest/dist/contentful.browser.min.js"></script>
 </head>
 <body>
     <header>
@@ -32,53 +31,49 @@
     </footer>
     <script src="https://js.stripe.com/v3/"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             const stripe = Stripe('pk_live_51P3Z5yRxKIpEa9z2e3hVj0oMOq40S3nK1gWqWjOr3a2wEV2kRr5e5PA3mjaqYkFp2DkS44tYgNn581ywhaCAc6ca00b0TFEuGq');
             const supportContainer = document.getElementById('support-container');
 
-            const client = contentful.createClient({
-                space: window.CONTENTFUL_SPACE_ID,
-                accessToken: window.CONTENTFUL_ACCESS_TOKEN,
-            });
+            try {
+                const response = await fetch('/api/contentful?content_type=5YmWnOsbaqjCb367hRLpST');
+                const data = await response.json();
 
-            client.getEntries({
-                content_type: '5YmWnOsbaqjCb367hRLpST'
-            })
-        .then((response) => {
-            response.items.forEach(item => {
-                const tier = document.createElement('div');
-                tier.classList.add('tier');
+                data.items.forEach(item => {
+                    const tier = document.createElement('div');
+                    tier.classList.add('tier');
 
-                const tierName = document.createElement('h2');
-                tierName.textContent = item.fields.tierName;
-                tier.appendChild(tierName);
+                    const tierName = document.createElement('h2');
+                    tierName.textContent = item.fields.tierName;
+                    tier.appendChild(tierName);
 
-                const tierDescription = document.createElement('p');
-                tierDescription.textContent = item.fields.tierDescription;
-                tier.appendChild(tierDescription);
+                    const tierDescription = document.createElement('p');
+                    tierDescription.textContent = item.fields.tierDescription;
+                    tier.appendChild(tierDescription);
 
-                const supportButton = document.createElement('button');
-                supportButton.classList.add('support-button');
-                supportButton.textContent = 'Support the Dream';
-                supportButton.addEventListener('click', () => {
-                    stripe.redirectToCheckout({
-                        lineItems: [{ price: item.fields.stripePriceId, quantity: 1 }],
-                        mode: 'payment',
-                        successUrl: window.location.origin + '/support-success.html',
-                        cancelUrl: window.location.origin + '/support-cancel.html',
-                    })
-                    .then(function (result) {
-                        if (result.error) {
-                            alert(result.error.message);
-                        }
+                    const supportButton = document.createElement('button');
+                    supportButton.classList.add('support-button');
+                    supportButton.textContent = 'Support the Dream';
+                    supportButton.addEventListener('click', () => {
+                        stripe.redirectToCheckout({
+                            lineItems: [{ price: item.fields.stripePriceId, quantity: 1 }],
+                            mode: 'payment',
+                            successUrl: window.location.origin + '/support-success.html',
+                            cancelUrl: window.location.origin + '/support-cancel.html',
+                        })
+                        .then(function (result) {
+                            if (result.error) {
+                                alert(result.error.message);
+                            }
+                        });
                     });
-                });
-                tier.appendChild(supportButton);
+                    tier.appendChild(supportButton);
 
-                supportContainer.appendChild(tier);
-            });
-        })
-        .catch(console.error);
+                    supportContainer.appendChild(tier);
+                });
+            } catch (error) {
+                console.error('Failed to load support tiers:', error);
+            }
         });
     </script>
 </body>
