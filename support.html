@@ -51,6 +51,14 @@
                     tierDescription.textContent = item.fields.tierDescription;
                     tier.appendChild(tierDescription);
 
+                    const tierImage = document.createElement('img');
+                    const imageAsset = data.includes.Asset.find(asset => asset.sys.id === item.fields.tierImage.sys.id);
+                    if (imageAsset) {
+                        tierImage.src = 'https:' + imageAsset.fields.file.url;
+                        tierImage.alt = imageAsset.fields.title;
+                        tier.appendChild(tierImage);
+                    }
+
                     const supportButton = document.createElement('button');
                     supportButton.classList.add('support-button');
                     supportButton.textContent = 'Support the Dream';
