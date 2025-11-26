@@ -51,37 +51,84 @@
                     productDescription.textContent = item.fields.productDescription;
                     product.appendChild(productDescription);
 
-                    const productImage = document.createElement('img');
-                    const imageAsset = data.includes.Asset.find(asset => asset.sys.id === item.fields.productImage.sys.id);
-                    if (imageAsset) {
-                        productImage.src = 'https:' + imageAsset.fields.file.url;
-                        productImage.alt = imageAsset.fields.title;
-                        product.appendChild(productImage);
+                    const mediaAsset = data.includes.Asset.find(asset => asset.sys.id === item.fields.productImage.sys.id);
+                    if (mediaAsset) {
+                        const fileType = mediaAsset.fields.file.contentType;
+                        if (fileType.startsWith('video')) {
+                            const productVideo = document.createElement('video');
+                            productVideo.src = 'https:' + mediaAsset.fields.file.url;
+                            productVideo.autoplay = true;
+                            productVideo.loop = true;
+                            productVideo.muted = true; // Necessary for autoplay in most browsers
+                            productVideo.playsInline = true;
+                            productVideo.classList.add('product-media');
+                            product.appendChild(productVideo);
+                        } else if (fileType.startsWith('image')) {
+                            const productImage = document.createElement('img');
+                            productImage.src = 'https:' + mediaAsset.fields.file.url;
+                            productImage.alt = mediaAsset.fields.title;
+                            productImage.classList.add('product-media');
+                            product.appendChild(productImage);
+                        }
                     }
 
                     const price = document.createElement('div');
                     price.classList.add('price');
-                    price.textContent = `\$${item.fields.price}`;
+                    price.textContent = 'Loading price...';
                     product.appendChild(price);
+
+                    // Fetch the price from our secure API
+                    if (item.fields.stripePriceId) {
+                        fetch(`/api/get-stripe-price?priceId=${item.fields.stripePriceId}`)
+                            .then(res => res.json())
+                            .then(priceData => {
+                                if (priceData.unit_amount) {
+                                    const amount = (priceData.unit_amount / 100).toLocaleString('en-US', {
+                                        style: 'currency',
+                                        currency: priceData.currency || 'USD',
+                                    });
+                                    price.textContent = amount;
+                                } else {
+                                    price.textContent = 'Price unavailable';
+                                }
+                            })
+                            .catch(() => price.textContent = 'Error loading price');
+                    } else {
+                        price.textContent = 'Not for sale';
+                    }
 
                     const buyButton = document.createElement('button');
                     buyButton.classList.add('buy-button');
                     buyButton.textContent = 'Buy Now';
-                    buyButton.addEventListener('click', () => {
-                        stripe.redirectToCheckout({
-                            lineItems: [{
-                                price: item.fields.stripePriceId,
-                                quantity: 1
-                            }],
-                            mode: 'payment',
-                            successUrl: window.location.origin + '/order-success.html',
-                            cancelUrl: window.location.origin + '/order-cancel.html',
-                        })
-                        .then(function (result) {
-                            if (result.error) {
-                                alert(result.error.message);
+                    buyButton.addEventListener('click', async () => {
+                        try {
+                            const response = await fetch('/api/create-checkout-session', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                    priceId: item.fields.stripePriceId,
+                                    successUrl: `${window.location.origin}/order-success.html`,
+                                    cancelUrl: `${window.location.origin}/order-cancel.html`,
+                                }),
+                            });
+
+                            const { sessionId, error } = await response.json();
+
+                            if (error) {
+                                throw new Error(error);
                             }
-                        });
+
+                            const { error: stripeError } = await stripe.redirectToCheckout({ sessionId });
+
+                            if (stripeError) {
+                                alert(stripeError.message);
+                            }
+                        } catch (error) {
+                            console.error('Checkout error:', error);
+                            alert('Failed to initiate checkout. Please try again.');
+                        }
                     });
                     product.appendChild(buyButton);
 

@@ -88,27 +88,61 @@
 
                     const price = document.createElement('div');
                     price.classList.add('price');
-                    price.textContent = `\$${item.fields.price}`;
+                    price.textContent = 'Loading price...';
                     tourPackage.appendChild(price);
+
+                    // Fetch the price from our secure API
+                    if (item.fields.stripePriceId) {
+                        fetch(`/api/get-stripe-price?priceId=${item.fields.stripePriceId}`)
+                            .then(res => res.json())
+                            .then(priceData => {
+                                if (priceData.unit_amount) {
+                                    const amount = (priceData.unit_amount / 100).toLocaleString('en-US', {
+                                        style: 'currency',
+                                        currency: priceData.currency || 'USD',
+                                    });
+                                    price.textContent = amount;
+                                } else {
+                                    price.textContent = 'Price unavailable';
+                                }
+                            })
+                            .catch(() => price.textContent = 'Error loading price');
+                    } else {
+                        price.textContent = 'Contact for booking';
+                    }
 
                     const bookButton = document.createElement('button');
                     bookButton.classList.add('buy-button');
                     bookButton.textContent = 'Book Now';
-                    bookButton.addEventListener('click', () => {
-                        stripe.redirectToCheckout({
-                            lineItems: [{
-                                price: item.fields.stripePriceId,
-                                quantity: 1
-                            }],
-                            mode: 'payment',
-                            successUrl: window.location.origin + '/tour-success.html',
-                            cancelUrl: window.location.origin + '/tour-cancel.html',
-                        })
-                        .then(function (result) {
-                            if (result.error) {
-                                alert(result.error.message);
+                    bookButton.addEventListener('click', async () => {
+                        try {
+                            const response = await fetch('/api/create-checkout-session', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                    priceId: item.fields.stripePriceId,
+                                    successUrl: `${window.location.origin}/tour-success.html`,
+                                    cancelUrl: `${window.location.origin}/tour-cancel.html`,
+                                }),
+                            });
+
+                            const { sessionId, error } = await response.json();
+
+                            if (error) {
+                                throw new Error(error);
                             }
-                        });
+
+                            const { error: stripeError } = await stripe.redirectToCheckout({ sessionId });
+
+                            if (stripeError) {
+                                alert(stripeError.message);
+                            }
+                        } catch (error) {
+                            console.error('Checkout error:', error);
+                            alert('Failed to initiate checkout. Please try again.');
+                        }
                     });
                     tourPackage.appendChild(bookButton);
 

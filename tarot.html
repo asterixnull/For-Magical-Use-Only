@@ -20,8 +20,14 @@
         <a href="tarot.html" title="Tarot"><i class="fas fa-book-open"></i></a>
         <a href="contact.html" title="Contact"><i class="fas fa-envelope"></i></a>
     </nav>
+    <header>
+        <h1>Slab City Vortex Tarot</h1>
+    </header>
     <div id="tarot-container">
-        <button id="draw-button">Draw the Vortex</button>
+        <div id="tarot-intro">
+            <p>A 7-card spread from the Oracle of the Outhouse.</p>
+            <button id="draw-button">Draw the Vortex</button>
+        </div>
         <!-- Tarot cards will be dynamically inserted here -->
     </div>
 
@@ -58,6 +64,9 @@
             }
 
             function drawCards() {
+                // Hide the intro text
+                document.getElementById('tarot-intro').style.display = 'none';
+
                 // Clear previous draw but keep the button
                 tarotContainer.innerHTML = '<button id="draw-button">Draw the Vortex</button>';
                 attachDrawListener();
