@@ -114,21 +114,35 @@
                     const bookButton = document.createElement('button');
                     bookButton.classList.add('buy-button');
                     bookButton.textContent = 'Book Now';
-                    bookButton.addEventListener('click', () => {
-                        stripe.redirectToCheckout({
-                            lineItems: [{
-                                price: item.fields.stripePriceId,
-                                quantity: 1
-                            }],
-                            mode: 'payment',
-                            successUrl: window.location.origin + '/tour-success.html',
-                            cancelUrl: window.location.origin + '/tour-cancel.html',
-                        })
-                        .then(function (result) {
-                            if (result.error) {
-                                alert(result.error.message);
+                    bookButton.addEventListener('click', async () => {
+                        try {
+                            const response = await fetch('/api/create-checkout-session', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                    priceId: item.fields.stripePriceId,
+                                    successUrl: `${window.location.origin}/tour-success.html`,
+                                    cancelUrl: `${window.location.origin}/tour-cancel.html`,
+                                }),
+                            });
+
+                            const { sessionId, error } = await response.json();
+
+                            if (error) {
+                                throw new Error(error);
                             }
-                        });
+
+                            const { error: stripeError } = await stripe.redirectToCheckout({ sessionId });
+
+                            if (stripeError) {
+                                alert(stripeError.message);
+                            }
+                        } catch (error) {
+                            console.error('Checkout error:', error);
+                            alert('Failed to initiate checkout. Please try again.');
+                        }
                     });
                     tourPackage.appendChild(bookButton);
 
